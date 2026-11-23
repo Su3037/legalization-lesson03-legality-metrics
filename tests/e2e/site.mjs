@@ -2,7 +2,8 @@
 // SITE_URL=https://su3037.github.io/legalization-lesson03-legality-metrics/ node tests/e2e/site.mjs [out.json]
 // Exercises every page, the live checker, a challenge, film-to-lab transfer, and runs axe-core.
 import { chromium } from "../../scripts/pw.mjs";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import { createRequire } from "node:module";
 
 const BASE = (process.env.SITE_URL || "http://127.0.0.1:8803/legalization-lesson03-legality-metrics/").replace(/\/?$/, "/");
@@ -124,6 +125,6 @@ for (const [scheme, p] of [...PAGES.map((p) => ["light", p]), ...PAGES.map((p) =
 }
 await browser.close();
 results.failed = failed;
-if (process.argv[2]) writeFileSync(process.argv[2], JSON.stringify(results, null, 1));
+if (process.argv[2]) { mkdirSync(dirname(process.argv[2]), { recursive: true }); writeFileSync(process.argv[2], JSON.stringify(results, null, 1)); }
 console.log(failed ? `${failed} check(s) failed` : "all site checks passed");
 process.exit(failed ? 1 : 0);

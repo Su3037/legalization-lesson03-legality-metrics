@@ -23,8 +23,8 @@ Status as of 2026-11-23. "Pass" means the check ran and met its bar; "Fail" mean
 | Teacher feedback T01–T24 mapped to checks | table | **Pass** | `docs/teacher-feedback.md` |
 | Slides | 10–14, page numbers, notes, PDF | **Pass** | 12 slides, `Module 03 · p / 12`, notes on `/slides/`, PDF 12 pages; overflow check 0 |
 | Python package | starter / reference / fixtures / PASS·INCOMPLETE·FAIL | **Pass** | reference PASS 24/24; starter INCOMPLETE; closed-interval and float mutants FAIL |
-| Clean rebuild + Actions green | CI and Pages workflows | see below | |
-| Deployed URL exercised by Playwright + axe-core | all checks pass | see below | `tests/e2e/site.mjs` |
+| Clean rebuild + Actions green | CI and Pages workflows | **Pass** | `ci` workflow green; `pages` build + deploy green (Actions tab) |
+| Deployed URL exercised by Playwright + axe-core | all checks pass | **Pass** | https://su3037.github.io/legalization-lesson03-legality-metrics/ — `pages` workflow, job `check-deployed` |
 
 ## Site checks
 
@@ -35,4 +35,4 @@ keyboard move creates overlap, fixed toggle flips the verdict, step-through high
 line); 10 challenges and 8 inventory items render; film metadata loads and a frame at 262 s opens in
 the lab and re-checks legal; downloads resolve.
 
-Deployed site: DEPLOYED_RESULT
+Deployed site (2026-11-23, GitHub Actions job `check-deployed` against https://su3037.github.io/legalization-lesson03-legality-metrics/): every check above passed on the live URL, including axe-core in light and dark mode on all 10 pages, the film→lab transfer at 262 s, and all downloads (film, sample, slides PDF, Python zip, outline, captions). The first attempt only failed when saving its JSON report (missing `build/` folder); fixed in the next commit.
