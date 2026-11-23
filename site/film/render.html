@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><title>Film renderer</title>
+<link rel="stylesheet" href="../assets/fonts.css">
 <link rel="stylesheet" href="../assets/film.css"></head>
 <body><div id="stage"></div>
 <script type="module">
@@ -7,20 +8,27 @@ import { buildWorld, stateAt, snapshot } from "../src/film/timeline.js";
 import { renderFrame } from "../src/film/scene.js";
 const q = new URLSearchParams(location.search);
 const captions = q.get("captions") !== "0";
-const J = (u) => fetch(u).then((r) => r.json());
+const film = q.get("film") || "concise";
+const J = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u + " " + r.status); return r.json(); });
 const [raw, cases, trade, cpsat, gcd, clock] = await Promise.all([
   J("../data/fixtures/tiny_legal.json"), J("../data/fixtures/cases.json"), J("../data/fixtures/tradeoff.json"),
-  J("../data/cpsat-results.json"), J("../data/gcd-placement.json"), J(q.get("clock") || "../media/film/clock.zh.json")]);
-const W = buildWorld({ raw, cases: cases.cases, trade, cpsat, gcd });
+  J("../data/cpsat-results.json"), J("../data/gcd-placement.json"), J(`../media/films/${film}.clock.zh.json`)]);
+const walk = clock.kind === "walk" ? await J("../media/walk/walk.json").then((w) => ({ ...w, steps: w.steps.map((s) => ({ ...s, before: "../media/walk/" + s.before, after: "../media/walk/" + s.after })) })).catch(() => null) : null;
+const W = buildWorld({ raw, cases: cases.cases, trade, cpsat, gcd, walk });
 const stage = document.getElementById("stage");
-window.clock = { duration: clock.duration, fps: clock.fps, cues: clock.cues.map((c) => ({ id: c.id, start: c.start, end: c.end, title: c.title })) };
-window.renderAt = (t) => {
+const imgs = {};
+if (walk) for (const s of walk.steps) for (const src of [s.before, s.after]) { const im = new Image(); im.src = src; imgs[src] = im.decode(); }
+await Promise.all(Object.values(imgs));
+window.clock = { duration: clock.duration, fps: clock.fps, kind: clock.kind, cues: clock.cues.map((c) => ({ id: c.id, start: c.start, end: c.end, title: c.title })) };
+window.renderAt = async (t) => {
   const s = stateAt(W, clock, t);
   stage.innerHTML = renderFrame(s, { captions, gcd });
+  const im = stage.querySelector("img");
+  if (im && !im.complete) await im.decode().catch(() => {});
   return snapshot(s);
 };
 window.stateAt = (t) => stateAt(W, clock, t);
 await document.fonts.ready;
-window.renderAt(Number(q.get("t") || 0));
+await window.renderAt(Number(q.get("t") || 0));
 window.ready = true;
 </script></body></html>

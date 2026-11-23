@@ -1,50 +1,263 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>合法吗？布局合法性检查与指标</title>
-<meta name="description" content="Module 03 · Legality Metrics：用五条规则判断一张标准单元布局是否合法，再用位移和半周长线长比较修复结果。">
-<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
-<body><!--NAV-->
-<main id="main" class="page">
-<h1>合法吗？——布局合法性检查与指标</h1>
-<p class="lead">全局布局给了每个单元一个坐标。这张布局能直接交给下一步吗？这一课先学会判断：它到底合不合法，合法以后又该怎么比较好坏。</p>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>合法吗？布局合法性检查与指标 · Legalization Lesson 03</title>
+<meta name="description" content="Legality metrics lesson: five legality rules, a checker, displacement and HPWL; four films, a live lab, challenges and a Python track.">
+<link rel="stylesheet" href="{{BASE}}assets/fonts.css">
+<link rel="stylesheet" href="{{BASE}}assets/site.css">
+</head>
+<body>
+<div id="app">
+<a class="skip" href="#main">跳到正文</a>
+<!--TOPBAR-->
+<nav class="module-nav" aria-label="本课各部分"><div class="wrap">
+<a href="#goals"><span>01</span>目标与问题</a><a href="#films"><span>02</span>影片</a><a href="#lesson"><span>03</span>讲解</a><a href="#slides"><span>04</span>课件</a><a href="#lab"><span>05</span>实验台</a><a href="#challenges"><span>06</span>挑战</a><a href="#quiz"><span>07</span>自测</a><a href="#python"><span>08</span>Python</a><a href="#mistakes"><span>09</span>易错点</a><a href="#repro"><span>10</span>复现与来源</a>
+</div></nav>
+<main id="main">
+<header class="mod-hero"><div class="wrap"><div>
+<p class="eyebrow">Legalization · Lesson 03 · 合法性检查与指标</p>
+<h1>合法吗？</h1>
+<p class="sub">全局布局给了每个单元一个坐标。这张布局能直接交给下一步吗？先学会判断它合不合法，再学怎么比较两个都合法的结果。</p>
+<p class="byline">约 60 分钟 · 4 部影片 · 实验台 · 10 个挑战 · Python 练习 · 改编自 yongfu-li/eda-learning Module 01-03（CC BY 4.0）</p>
+</div>
+<aside class="factbox"><dl>
+<dt>前置</dt><dd>知道标准单元、行和全局布局在做什么；会读简单的伪代码。</dd>
+<dt>例子</dt><dd>芯片 12 × 6，三行，六个单元（D 固定），六个线网。</dd>
+<dt>规则</dt><dd>在行上 · 对齐站点 · 整个在芯片内 · 同行不重叠 · 固定单元不动</dd>
+<dt>指标</dt><dd>位移（总和、平均、最大）· 半周长线长 HPWL</dd>
+<dt>验证</dt><dd>CP-SAT 精确最优 · OpenROAD check_placement · 18 个变异体</dd>
+</dl></aside></div></header>
 
-<div class="hero">
-<div>
-<video controls preload="metadata" poster="{{BASE}}media/renders/sample.poster.jpg" aria-describedby="sample-note">
-<source src="{{BASE}}media/renders/sample.zh.captioned.mp4" type="video/mp4">
-</video>
-<p id="sample-note" class="hint">32 秒样片（第 11 段：两种修复办法，两套代价）。无配音，字幕已烧入画面；完整影片和文字稿在<a href="{{BASE}}film/">影片页</a>。为什么没有配音，见<a href="{{BASE}}verify/#voice">验证页</a>。</p>
-</div>
-<div class="card">
-<h2 style="margin-top:0">问题是什么</h2>
-<dl class="def">
-<dt>输入</dt><dd>芯片尺寸、行（底边 y、行高）、站点宽；每个单元的宽高；哪些单元是固定的；线网；以及一张布局（每个单元左下角的坐标）。</dd>
-<dt>输出</dt><dd>结论（合法 / 不合法 / 输入无效），全部违规清单（规则、单元、坐标），以及位移和半周长线长两个指标。</dd>
-<dt>约束</dt><dd>五条规则：在行上、对齐站点、整个单元在芯片内、同行不重叠（左闭右开，相接可以）、固定单元不动。</dd>
-<dt>目标</dt><dd>先合法，再比分数：位移小，线长短。分数救不了不合法的布局。</dd>
-<dt>假设</dt><dd>单元都是一行高；坐标是左下角；行和站点均匀；线网的引脚取单元中心。</dd>
-<dt>停止</dt><dd>输入无效时立即停止，不做几何检查；否则检查完每个单元和同一行的每一对单元，再给出结论。</dd>
-<dt>不包括</dt><dd>朝向、限定区域、禁止放置区、单元间距、多行高单元。这些在<a href="{{BASE}}lesson/#real">讲解第 9 节</a>里说明。</dd>
-</dl>
-</div>
+<section id="goals" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">01 / 目标与问题</p><h2>学完能做什么</h2></div></div>
+<div class="grid-2"><div><ol class="objectives">
+<li>说出一张标准单元布局<b>合法</b>的五条规则，并对任意布局逐条判断。</li>
+<li>写出一个检查器：先校验输入，再列出<b>全部</b>违规，而不只是第一条。</li>
+<li>用左闭右开的区间判断重叠，分清“相接”和“重叠”。</li>
+<li>从一张固定的参考布局计算位移（总和、平均、最大），用单元中心计算 HPWL。</li>
+<li>比较两个合法的修复结果时，先说清楚比的是哪个指标；知道最优常常不唯一。</li>
+<li>说出玩具检查器和真实签核工具之间还差哪些检查。</li>
+</ol></div>
+<div><h3>问题是什么</h3><div class="problem">
+<div><b>输入</b><p>芯片、行（底边 y、行高）、站点宽；单元宽高；固定声明；线网；一张布局（左下角坐标）。</p></div>
+<div><b>输出</b><p>结论（合法 / 不合法 / 输入无效）、全部违规清单，以及位移和 HPWL。</p></div>
+<div><b>约束</b><p>五条规则同时成立。区间 [x, x + w) 左闭右开，相接可以。</p></div>
+<div><b>目标</b><p>先合法，再比分数：位移小，线长短。分数救不了不合法的布局。</p></div>
+<div><b>假设</b><p>单元都是一行高；坐标是左下角；行和站点均匀；线网的引脚取单元中心。</p></div>
+<div><b>停止</b><p>输入无效时立即停止，不做几何检查；否则查完每个单元和同行的每一对。</p></div>
+</div></div></div>
+</div></section>
+
+<section id="films" class="section dark"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">02 / 影片</p><h2>四部影片</h2></div><p>科普、精讲、进阶、实验演示。画面由课程代码逐帧渲染，暂停在任意一帧，点“在实验台打开这一帧”就能把同一张布局带到下面的实验台重新检查。</p></div>
+<div data-k="player"><p class="muted">影片载入中…（需要 JavaScript）</p></div>
+</div></section>
+
+<section id="lesson" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">03 / 讲解</p><h2>五条规则、一个检查器、两个指标</h2></div><p>每张图都由实验台用的同一个检查器判定，图下的标签就是它的结论。<a href="{{BASE}}downloads/module03-outline.md" download>下载 Markdown 大纲</a></p></div>
+<div class="lesson-layout"><nav class="lesson-toc" aria-label="讲解目录">
+<a href="#terms"><span>03.1</span>行、站点、坐标、区间</a><a href="#rules"><span>03.2</span>五条规则</a><a href="#checker"><span>03.3</span>检查器</a><a href="#l-snap"><span>03.4</span>取整不等于合法</a><a href="#l-metrics"><span>03.5</span>位移与 HPWL</a><a href="#conventions"><span>03.6</span>会改变数字的约定</a><a href="#repair"><span>03.7</span>修复与精确最优</a><a href="#sum-max"><span>03.8</span>总和与最大值</a><a href="#real"><span>03.9</span>真实检查器还查什么</a>
+</nav>
+<div class="prose wide">
+
+<div class="lesson-part" id="terms"><span class="part-no">03.1</span><h3>行、站点、坐标、区间</h3>
+<p>本课的芯片宽 12、高 6，分成三行，每行高 2，行的底边在 y = 0、2、4。每一行又切成宽 1 的站点。单元的坐标指它的<b>左下角</b>。所以 A 在 (4, 2)，意思是它从第 4 格开始，占住 4 到 6 这一段。我们把这一段写成<b>左闭右开</b>的区间 [4, 6)：4 算在里面，6 不算。</p>
+<div class="defs one"><article class="def"><div class="fig"><!--FIG:terms--></div><h4>行（háng）· 站点 · 锚点 · 区间</h4><p>行是单元可以落脚的水平带；站点是行里宽 1 的格子；锚点是单元左下角；区间 [x, x + w) 是单元在行里占的长度。</p></article></div>
 </div>
 
-<h2>怎么学</h2>
-<ol class="steps">
-<li><a href="{{BASE}}challenges/#inventory-pre">先做 8 道概念题</a>（约 5 分钟，可跳过），看看自己现在的想法。</li>
-<li>看<a href="{{BASE}}film/">影片</a>（约 6 分钟）或读<a href="{{BASE}}lesson/">讲解</a>：五条规则、检查器、两个指标、修复与最优。</li>
-<li>在<a href="{{BASE}}lab/">实验台</a>上拖动单元，看检查器逐行运行；影片任意一帧都能“在实验台打开”。</li>
-<li>完成 <a href="{{BASE}}challenges/">10 个挑战</a>：每题针对一个常见误区，按布局状态判分，正确答案不止一个。</li>
-<li>下载 <a href="{{BASE}}python/">Python 练习</a>，自己实现检查器，本地自测给出 PASS / INCOMPLETE / FAIL。</li>
+<div class="lesson-part" id="rules"><span class="part-no">03.2</span><h3>五条规则</h3>
+<p>一张布局<b>合法</b>，当且仅当下面五条同时成立，并且输入完整（见 03.3）。</p>
+<div class="defs">
+<article class="def"><div class="fig"><!--FIG:offrow--></div><h4>规则一：在行上</h4><p>单元的底边必须正好落在某一行的底边上。</p></article>
+<article class="def"><div class="fig"><!--FIG:offsite--></div><h4>规则二：对齐站点</h4><p>x 减去第一个站点的位置，必须是站点宽的整数倍。差半格也不行。</p></article>
+<article class="def"><div class="fig"><!--FIG:outside--></div><h4>规则三：整个单元在芯片内</h4><p>看整个矩形，不只是左下角：x ≥ 0，x + w ≤ W，y ≥ 0，y + h ≤ H。</p></article>
+<article class="def"><div class="fig"><!--FIG:touch--></div><h4>规则四：相接可以</h4><p>a.x + a.w = b.x 时两个区间没有共用任何长度，合法。</p></article>
+<article class="def"><div class="fig"><!--FIG:overlap1--></div><h4>规则四：同行不重叠</h4><p>a.x &lt; b.x + b.w 且 b.x &lt; a.x + a.w 才算重叠。B 往左挪一格就共用了 1 格。</p></article>
+<article class="def"><div class="fig"><!--FIG:fixed--></div><h4>规则五：固定单元不能动</h4><p>D 被声明为固定，就必须待在 (8, 4)。挪到空地上也算违规。</p></article>
+<article class="def"><div class="fig"><!--FIG:fixedOff--></div><h4>同一张布局，关掉固定约束</h4><p>固定声明是输入的一部分：问题变了，答案也跟着变。实验台上可以切换开关对比。</p></article>
+</div></div>
+
+<div class="lesson-part" id="checker"><span class="part-no">03.3</span><h3>检查器：第一条错误和全部错误</h3>
+<p>把五条规则合在一起，就是一个完整的检查器。它<b>先确认输入是完整的</b>：少了单元、多了没声明的单元、坐标不是有限的数、线网或固定声明里出现了没声明的单元，都直接判为<b>输入无效</b>，不再做几何检查，也不会替未知单元编一个默认宽度。然后它逐个单元、逐对单元地检查，把每一条违规都记下来。</p>
+<pre class="code">0  输入：芯片、单元、线网、固定声明；布局；参考布局
+1  若输入不完整或有非法数值 → 输入无效，停止
+2  对每个单元 c：
+3    若 c.y 不是任何一行的底边 → 记 ROW
+4    若 (c.x − x0) 不是站点宽的整数倍 → 记 SITE
+5    若 c 的整个矩形不在芯片内 → 记 BOUNDS
+6    若 c 是固定单元且坐标变了 → 记 FIXED
+7  对同一行里的每一对单元 (a, b)：
+8    若 [a.x, a.x+a.w) 与 [b.x, b.x+b.w) 相交 → 记 OVERLAP
+9  合法 ⇔ 一条记录都没有；第一条记录 = 最先发现的错误
+10 位移 = Σ |x−x参考| + |y−y参考|；HPWL = Σ 线网中心包围盒的宽 + 高</pre>
+<p>回到开场的布局：第一条错误是 A 和 B 重叠，但完整的清单有三条（A/B、A/C、B/C）。只报第一条的检查器会让人修了一处又冒出一处；本课的检查器两样都给。实验台的“逐步检查”会一行一行高亮上面的伪代码。</p>
+<div class="defs one"><article class="def"><div class="fig"><!--FIG:seed--></div><h4>开场布局</h4><p>A、B、C 挤在中间一行的同一个位置：三条 OVERLAP。</p></article></div>
+<p class="callout">坐标在内部换成整数：检查器把所有坐标乘以 1000（数据库单位，DBU）再比较，只有离整数不到 10<sup>−6</sup> 时才取整。站点宽是 0.19 之类的非整数时，“对齐站点”也能精确判断，不会因为浮点误差把 0.57 判成没对齐。</p>
+</div>
+
+<div class="lesson-part" id="l-snap"><span class="part-no">03.4</span><h3>取整不等于合法</h3>
+<p>把坐标四舍五入，不就合法了吗？全局布局给的是小数，取整以后每个单元都对齐了站点，也都落在行上。可是 A 和 B 还是叠在一起。<b>取整只解决了对齐，没有解决重叠。</b></p>
+<div class="defs one"><article class="def"><div class="fig"><!--FIG:snapped--></div><h4>只取整</h4><p>每个单元都在行上、对齐站点，但仍然重叠。</p></article></div>
+</div>
+
+<div class="lesson-part" id="l-metrics"><span class="part-no">03.5</span><h3>两个指标：位移与半周长线长</h3>
+<p><b>位移</b>：每个单元算它离参考位置的 |Δx| + |Δy|，再把所有单元加起来；检查器同时报告总和、平均值和最大值。参考位置要先说清楚，而且中途不能换：如果每挪一次就把参考换成当前布局，第二次挪动就会把第一次的账抹掉。实验台上的参考布局只有在你明确点“设为新参考”时才会改变。</p>
+<p><b>半周长线长（HPWL）</b>：取线网里每个单元的<b>中心</b>，框出最小的矩形，宽加高就是这个线网的 HPWL；所有线网加起来就是总 HPWL。用中心而不是左下角，宽度不同的单元才算得公平。只连一个单元的线网，HPWL 为 0。</p>
+<div class="defs">
+<article class="def"><div class="fig"><!--FIG:disp--></div><h4>位移 = Σ |Δx| + |Δy|</h4><p>参考布局不变，箭头是每个单元离参考的距离。</p></article>
+<article class="def"><div class="fig"><!--FIG:hpwl--></div><h4>HPWL = 包围盒的宽 + 高</h4><p>白点是单元中心，虚线框是线网 {A, B, C, D} 的包围盒。</p></article>
+</div>
+<p class="callout">指标只是诊断。不合法的布局也会算出位移和 HPWL，但会标明“不合法”；分数再好，也不能把不合法变成合法。</p>
+</div>
+
+<div class="lesson-part" id="conventions"><span class="part-no">03.6</span><h3>会改变数字的约定</h3>
+<p>同一张布局，换一个约定，数字就会变。比较两篇论文或两个工具的数字之前，先对齐这些约定。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="表格"><table class="contrib">
+<thead><tr><th>选择</th><th>本课</th><th>其他常见做法</th></tr></thead>
+<tbody>
+<tr><td>几何与位移的锚点</td><td>左下角</td><td>中心（单元尺寸不变时位移相同）</td></tr>
+<tr><td>HPWL 的引脚位置</td><td>单元中心</td><td>左下角（本系列前一课）；LEF 里真实的引脚偏移（gcd 演示）</td></tr>
+<tr><td>位移的度量</td><td>曼哈顿距离求和</td><td>平均值、最大值、欧氏距离平方（Abacus）</td></tr>
+<tr><td>固定单元算不算位移</td><td>算（正确时贡献 0）</td><td>不算（平均值的分母会变）</td></tr>
+<tr><td>单位</td><td>芯片单位（站点）</td><td>DEF 数据库单位（Nangate45 中 2000 DBU = 1 µm）</td></tr>
+<tr><td>相接算不算重叠</td><td>不算（左闭右开）</td><td>闭区间会把相接误判为重叠</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="lesson-part" id="repair"><span class="part-no">03.7</span><h3>修复演示与精确最优</h3>
+<p>现在来修开场那张布局。第一种办法，把这一行里的单元依次往右推：B 挪到 6，C 挪到 8，位移一共 6，HPWL 32。第二种办法，把 B 和 C 分别挪到上下两行：位移只有 4，HPWL 却变成 38。两个都合法。位移更小的那个，线长反而更长：说“更好”之前，要先说清楚比的是哪个指标。</p>
+<div class="defs">
+<article class="def"><div class="fig"><!--FIG:orm--></div><h4>行内依次推开</h4><p>位移 6，HPWL 32，合法。</p></article>
+<article class="def"><div class="fig"><!--FIG:lite--></div><h4>挪到上下两行（Abacus-lite）</h4><p>位移 4，HPWL 38，合法。</p></article>
+</div>
+<p>那 4 是不是最少的？我们用精确求解器（OR-Tools CP-SAT）在同样的规则下求最少总位移：</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="表格"><table class="contrib">
+<thead><tr><th>起点（参考）</th><th>最少总位移</th><th>最小的最大位移</th><th>最优摆法数</th><th>行内推开</th><th>Abacus-lite</th><th>Abacus</th><th>只取整</th></tr></thead>
+<tbody>
+<tr><td>开场重叠布局（D 固定）</td><td>4</td><td>2</td><td>48</td><td>6</td><td>4</td><td>4</td><td>不合法</td></tr>
+<tr><td>全局布局小数坐标（D 固定）</td><td>5.4</td><td>1.5</td><td>1</td><td>8.8</td><td>5.8</td><td>6.4</td><td>不合法</td></tr>
+</tbody></table></div>
+<p>在开场布局上，最少就是 4，而且有 48 种不同的摆法都能做到：挑战按“是否合法、位移是否达到目标”判分，而不是和某一张标准答案比对。从小数出发时，启发式方法会比最优多挪一些。表里的 Abacus 是 Spindler 等人 2008 年方法的一个小而忠实的实现，Abacus-lite 是教师材料里的简化版本。</p>
+</div>
+
+<div class="lesson-part" id="sum-max"><span class="part-no">03.8</span><h3>总和与最大值</h3>
+<p>位移的总和也不是唯一的说法。看这一行：X 掉在了 A 上面。让 X 一步跳到右边，总共挪 4，可是 X 一个人就挪了 4。让四个小单元各让 2 格，总共挪 8，但每个单元最多只挪 2。</p>
+<div class="defs">
+<article class="def"><div class="fig"><!--FIG:jump--></div><h4>一步跳开</h4><p>总和 4，最大 4。</p></article>
+<article class="def"><div class="fig"><!--FIG:shift--></div><h4>各让 2 格</h4><p>总和 8，最大 2。</p></article>
+</div>
+<p>精确求解器给出：这一行的最少总位移是 4，这时最大位移是 4；最大位移最少可以压到 2，这时总位移至少是 6。两者不能同时达到，所以有的比赛和工具会同时看平均值和最大值（ICCAD 2017 合法化比赛对最大位移设了限制；这一条来自文献，比赛网站在构建环境里无法访问，见来源核查）。</p>
+</div>
+
+<div class="lesson-part" id="real"><span class="part-no">03.9</span><h3>真实检查器还查什么</h3>
+<p>这个检查器很小。真正的签核工具要查的更多，本课都没有检查：朝向与行匹配（电源轨对齐）、限定区域与禁止放置区、单元间距与边缘规则、多行高单元、引脚可达与填充。</p>
+<p>我们在 OpenROAD 自带的 gcd 小设计（Nangate45，461 个单元，57 行）上试过：</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="表格"><table class="contrib">
+<thead><tr><th>布局</th><th>本课检查器</th><th>OpenROAD check_placement</th><th>是否一致</th></tr></thead>
+<tbody>
+<tr><td>全局布局结果</td><td>不合法：347 个单元不在行上 / 没对齐站点</td><td>FAIL：347 个站点对齐错误，237 个重叠</td><td>站点集合一致；OpenROAD 的 237 个重叠全部被找到，多出的 23 个是它只报了另一方的配对单元</td></tr>
+<tr><td>详细布局结果</td><td>合法</td><td>PASS</td><td>一致</td></tr>
+<tr><td>注入三处错误</td><td>恰好三条：SITE、ROW、OVERLAP</td><td>FAIL：同样三处</td><td>一致</td></tr>
+</tbody></table></div>
+<p class="small muted">在两边都检查的规则上，两者结果对得上。我们用的 OpenROAD 版本（2.0-12381）的 check_placement 不检查朝向，这一点由变异测试 M16 确认。</p>
+</div>
+
+</div></div>
+</div></section>
+
+<section id="slides" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">04 / 课件</p><h2>课件（12 页）</h2></div><p>每页下面是讲稿。图里的结论都由同一个检查器判定。<a href="{{BASE}}slides/out/legality-metrics-slides.pdf" download>下载 PDF</a></p></div>
+<div class="slides slide-view"><div class="slide-bar"><button type="button" class="btn small" data-a="prev">上一页</button><span class="pageno slide-page" aria-live="polite"></span><button type="button" class="btn small" data-a="next">下一页</button></div>
+<div class="slide-stage"><img class="slide-img" alt="" width="1920" height="1080"></div><div class="slide-notes"><h4>讲稿</h4><p class="slide-notes-text"></p></div></div>
+</div></section>
+
+<section id="lab" class="section dark"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">05 / 实验台</p><h2>亲手检查一张布局</h2></div><p>拖动单元（或选中后用方向键、输入坐标），检查器立刻重新判定。可以一次看完整结论，也可以逐步看检查器怎么走；修复按钮会把结果交回检查器重新判定。键盘：Tab 选中单元，方向键移动，Ctrl+Z 撤销。</p></div>
+<div data-k="lab" class="lab"><p class="muted">实验台载入中…（需要 JavaScript）</p></div>
+</div></section>
+
+<section id="challenges" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">06 / 挑战</p><h2>十个挑战</h2></div><p>每个挑战针对一个常见误区。摆放题按你摆出的布局判分：先用同一个检查器判断合法，再看指标是否达标，所以正确答案不止一个。进度只保存在这个浏览器里。</p></div>
+<div data-k="challenges"><p class="muted">载入中…（需要 JavaScript）</p></div>
+</div></section>
+
+<section id="quiz" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">07 / 自测</p><h2>八道自测题</h2></div><p>每题对应一个误区，选完立刻给出解释。想做正式的前测 / 后测（下载答案文件），请用<a href="{{BASE}}study/">学习者研究页</a>。</p></div>
+<div data-k="quiz"></div>
+</div></section>
+
+<section id="python" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">08 / Python</p><h2>自己写一个检查器</h2></div><p>只需要 Python 3.8+，不用装任何包。</p></div>
+<div class="grid-2"><div>
+<ol class="objectives">
+<li>下载压缩包，打开 <code>starter.py</code>，补完 7 个标了 TODO 的函数。</li>
+<li><code>validate</code>：空布局、缺单元、多了未声明的单元、坐标不是有限的数 → 输入无效。</li>
+<li><code>on_row</code>、<code>on_site</code>、<code>inside</code>：规则一到三，坐标换成整数 DBU 再比较。</li>
+<li><code>intervals_overlap</code>：左闭右开，相接不算重叠。<code>displacement</code>：相对不变的参考布局。<code>hpwl</code>：单元中心的包围盒。</li>
+<li>运行 <code>python check.py</code>：24 个用例，结果是 PASS、INCOMPLETE 或 FAIL。</li>
 </ol>
+<p class="btn-row"><a class="btn primary" href="{{BASE}}downloads/module03-python-exercise.zip" download>下载 Python 练习</a></p>
+</div><div>
+<h3>自测输出</h3>
+<pre class="code">$ python check.py
+  ok    seed: three cells stacked
+  ok    legal golden placement
+  FAIL  touching cells are legal: verdict 'illegal',
+        expected 'legal'; ...
+FAIL: 21 passed, 3 failed, 0 not implemented</pre>
+<p class="small muted">上面的 FAIL 来自一个把区间写成闭区间的实现：相接的 A、B 被误判为重叠。用例里还有三个站点宽 0.19 的布局，直接用浮点数比较也会 FAIL。PASS = 24 个全对；INCOMPLETE = 没有算错，但还有函数没写。完整的参考实现在仓库的 <a href="https://github.com/su3037/legalization-lesson03-legality-metrics/tree/main/python/legality_metrics">python/legality_metrics</a>。</p>
+</div></div>
+</div></section>
 
-<h2>为什么要学这个</h2>
-<p>放置流程通常分三步：全局布局求出大致位置，合法化把单元放进行和站点、去掉重叠，详细布局再做局部优化。合法化的输出必须严格满足这些几何规则，否则布线和签核都无法继续。会写检查器，才能判断任何一个合法化算法的结果是否可信；会算指标，才能比较两个都合法的结果。</p>
-<div class="cards">
-<div class="card"><b>一个检查器，两种语言</b><p class="hint">JavaScript（网页）和 Python（练习）实现同一份<a href="https://github.com/su3037/legalization-lesson03-legality-metrics/blob/main/docs/checker-spec.md">规格</a>，3,000 个随机用例结果一致。</p></div>
-<div class="card"><b>三个独立参照</b><p class="hint">CP-SAT 精确最优、OpenROAD <code>check_placement</code>、性质测试与 18 个变异体（全部被抓到）。见<a href="{{BASE}}verify/">验证页</a>。</p></div>
-<div class="card"><b>真实小设计</b><p class="hint">在 OpenROAD 的 gcd 设计（461 个单元）上，检查器和 OpenROAD 在两边都检查的规则上结果一致。</p></div>
+<section id="mistakes" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">09 / 易错点</p><h2>八个常见误区</h2></div><p>每一条都有一道挑战和一道自测题专门对付它。反例的结论都来自检查器。</p></div>
+<div class="mistakes">
+<div class="mistake"><h4>I1 · 取整就交出去</h4><p>取整只解决对齐，不解决重叠。开场小数坐标取整后 A(4,2)、B(4,2)、C(5,2)：OVERLAP ×3。取整之后还要去重叠，并重新检查。</p></div>
+<div class="mistake"><h4>I2 · 只看左下角在不在芯片里</h4><p>规则三看整个矩形。D 宽 2 放在 x = 11：BOUNDS D。检查 x + w ≤ W、y + h ≤ H。</p></div>
+<div class="mistake"><h4>I3 · 把相接当成重叠</h4><p>用闭区间的检查器会把合法布局判错。A [0,2) 与 B [2,4) 合法；用 a.x &lt; b.x + b.w 且 b.x &lt; a.x + a.w。</p></div>
+<div class="mistake"><h4>I4 · 没看到重叠就说合法</h4><p>五条规则要同时成立，而且输入要先完整。只给 A 的坐标：输入无效（V_MISSING），不是“合法”。</p></div>
+<div class="mistake"><h4>I5 · HPWL 更小就交那一张</h4><p>指标只在合法布局之间比较。开场布局 HPWL 32 却不合法；Abacus-lite 的 HPWL 38，但合法，只能交后者。</p></div>
+<div class="mistake"><h4>I6 · 每挪一步就从上一步算位移</h4><p>参考布局要固定。B 从 4 挪到 6 再到 8：位移是 4，不是 2。参考只在明确声明时更换。</p></div>
+<div class="mistake"><h4>I7 · 启发式给出的就是唯一最优</h4><p>最优要用精确方法确认，而且常常不唯一：开场布局最少位移 4，有 48 种摆法。</p></div>
+<div class="mistake"><h4>I8 · 玩具检查器通过就能签核</h4><p>真实工具还查朝向、区域、间距、多行高单元。本课检查器不看朝向；我们用的 OpenROAD 版本也不看（变异体 M16）。</p></div>
 </div>
+<div class="limits"><h3>这一课的边界</h3><ul class="prose">
+<li>单元都是一行高，行和站点均匀；不处理朝向、限定区域、禁止放置区、间距规则和多行高单元。</li>
+<li>HPWL 用单元中心代替真实引脚位置；gcd 演示里才用 LEF 的引脚偏移。</li>
+<li>精确最优只在这一课的小例子上求得；真实规模的合法化不会去求精确最优。</li>
+<li>旁白是开源合成声音（Kokoro），不是真人录音。读音按发音词表校正过，但用三个识别模型回听，字错误率仍有 4–5%，高于我们定的 3% 门槛；以字幕和文字稿为准。详见<a href="{{BASE}}verify/#voice">验证页</a>。</li>
+</ul></div>
+</div></section>
+
+<section id="repro" class="section"><div class="wrap">
+<div class="section-head"><div><p class="eyebrow">10 / 复现与来源</p><h2>怎么复现，资料从哪来</h2></div></div>
+<div class="grid-2"><div class="prose">
+<p>所有页面、影片画面、课件图和练习用例都由仓库里的代码生成：<code>npm test</code> 跑检查器和性质测试，<code>node scripts/build-films.mjs</code> 生成四部影片的时钟和字幕，<code>node scripts/render-film.mjs</code> 逐帧渲染，<code>python3 scripts/mix_audio.py</code> 混音。步骤见 <a href="https://github.com/su3037/legalization-lesson03-legality-metrics/blob/main/docs/REPRODUCIBILITY.md">REPRODUCIBILITY.md</a>。</p>
+<p>三个独立参照：OR-Tools CP-SAT 精确最优；OpenROAD 2.0-12381 的 check_placement（18 个变异体全部被抓到，gcd 结论一致）；fast-check 与 Hypothesis 性质测试，以及 JS 与 Python 两个实现在 3,000 个随机用例上的一致性。详细结果在<a href="{{BASE}}verify/">验证页</a>。</p>
+<p>《科普》影片按作者授权使用的曲目剪辑，录音不在仓库里；其余三部影片的配乐是用 NumPy 生成的原创音乐。旁白由 Kokoro（Apache-2.0）逐段合成，配了发音词表。</p>
+</div><div>
+<h3>来源</h3>
+<ul class="credits-list">
+<li>P. Spindler, U. Schlichtmann, F. M. Johannes. “Abacus: Fast Legalization of Standard Cell Circuits with Minimal Movement.” ISPD 2008.</li>
+<li>A. B. Kahng, J. Lienig, I. L. Markov, J. Hu. <i>VLSI Physical Design: From Graph Partitioning to Timing Closure</i>. Springer, 2011, 第 4 章。</li>
+<li>N. K. Darav 等. “ICCAD-2017 CAD Contest in Multi-Deck Standard Cell Legalization and Benchmarks.” ICCAD 2017.</li>
+<li>OpenROAD 详细布局模块 src/dpl 的 CheckPlacement（提交 01bba3695）；DREAMPlace 的 legality_check（DAC 2019）。</li>
+<li>LEF/DEF 5.8 语言参考（行、站点、朝向、组件位置）。</li>
+<li>改编自 Yongfu Li 的 <a href="https://github.com/yongfu-li/eda-learning">eda-learning</a>（CC BY 4.0），示例布局与 Abacus-lite 来自 Module 01-03。</li>
+<li>音乐：We Never (Remix)（若如初见）· Hi Noise / 秋成，仅用于《科普》影片，不属于本课程的授权范围。</li>
+<li>字体：Newsreader、Noto Serif SC、Noto Sans SC、JetBrains Mono（SIL OFL 1.1）。</li>
+</ul>
+<p class="small muted">每条资料用到了哪一部分、哪些来源因网络限制没能核对，见<a href="https://github.com/su3037/legalization-lesson03-legality-metrics/blob/main/docs/source-audit.md">来源核查</a>。</p>
+</div></div>
+</div></section>
 </main>
 <!--FOOT-->
-</body></html>
+</div>
+<script type="module">
+import { startPage } from "{{BASE}}src/site/page.js";
+startPage({ base: "{{BASE}}" }).catch((e) => { console.error(e); window.appError = String(e); });
+</script>
+</body>
+</html>

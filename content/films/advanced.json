@@ -1,0 +1,16 @@
+{
+ "id": "advanced",
+ "kind": "reading",
+ "label": "进阶",
+ "title": "校验、约定、精确最优与真实检查器",
+ "why": "无旁白、按阅读速度走的字幕片，讲精讲里略过的细节：输入校验与整数坐标、HPWL 的约定、CP-SAT 怎样确认最少位移、总和与最大值的取舍、和 OpenROAD 的对照。",
+ "credit": "配乐：原创（NumPy 生成）",
+ "source": "media/script.advanced.zh.md",
+ "cues": [
+  "c07",
+  "c10",
+  "c12",
+  "c13",
+  "c14"
+ ]
+}

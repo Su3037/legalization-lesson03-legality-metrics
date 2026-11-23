@@ -1,0 +1,27 @@
+{
+ "key": "lab-07-19e67a28",
+ "text": "回到开场布局，试试修复。行内依次推开：位移 6，半周长线长 32。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 8.053,
+ "gaps": [
+  [
+   1.68,
+   1.84
+  ],
+  [
+   3.14,
+   3.3
+  ],
+  [
+   4.94,
+   5.12
+  ],
+  [
+   5.86,
+   6.0
+  ]
+ ]
+}

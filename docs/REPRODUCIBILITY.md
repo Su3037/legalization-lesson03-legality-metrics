@@ -14,13 +14,18 @@ python3 oracles/cpsat/optimum.py         # CP-SAT optimum -> oracles/cpsat/resul
 python3 oracles/openroad/real_design.py  # gcd demo (needs OpenROAD; see below)
 python3 scripts/make_py_fixtures.py      # Python exercise fixtures
 python3 python/exercise/check.py --impl reference   # expect PASS
-node scripts/build-film-data.mjs         # clock, captions, chapters, transcript from media/script.zh.md
 node scripts/build-site.mjs              # -> dist/
 python3 scripts/serve.py &               # http://127.0.0.1:8803/legalization-lesson03-legality-metrics/
-node scripts/film-stills.mjs build/stills          # stills + determinism check
-node scripts/render-film.mjs ../media/film/clock.zh.json media/renders/film.zh.captioned.mp4
-node scripts/render-film.mjs ../media/film/clock.zh.json media/renders/film.zh.clean.mp4 --captions=0
-node scripts/render-film.mjs ../media/film/clock.zh.json media/renders/sample.zh.captioned.mp4 --from=237.0 --to=269.6
+node scripts/build-films.mjs --jobs     # list the voice paragraphs that need takes (build/voice-jobs.json)
+python3 scripts/voice_takes.py          # Kokoro, one take per paragraph -> media/voice/takes/ (needs /opt/models)
+node scripts/build-films.mjs            # clocks, captions, chapters, transcripts -> media/films/
+node scripts/build-site.mjs && python3 scripts/serve.py 8803 &
+node scripts/record-walk.mjs            # lab walkthrough screenshots from the real page -> media/walk/
+for f in story concise advanced lab; do
+  python3 scripts/mix_audio.py $f build/audio/$f.wav > media/renders/$f.zh.audio.json   # story needs the licensed track
+  FILM=$f node scripts/film-stills.mjs build/stills/$f                                   # stills + determinism check
+  node scripts/render-film.mjs $f media/renders/$f.zh.mp4 --audio=build/audio/$f.wav
+done
 node slides/build-slides.mjs             # 12 slides, PNGs, PDF
 node tests/e2e/site.mjs build/e2e.json   # every page + axe-core (light and dark) + lab/film flows
 SITE_URL=https://su3037.github.io/legalization-lesson03-legality-metrics/ node tests/e2e/site.mjs build/e2e-deployed.json

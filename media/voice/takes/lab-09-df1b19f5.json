@@ -1,0 +1,27 @@
+{
+ "key": "lab-09-df1b19f5",
+ "text": "再看精确最优之一：位移也是 4，但摆法不一样。最少位移的摆法，不止一种。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 9.039,
+ "gaps": [
+  [
+   2.22,
+   2.4
+  ],
+  [
+   3.84,
+   4.02
+  ],
+  [
+   5.6,
+   5.78
+  ],
+  [
+   7.66,
+   7.84
+  ]
+ ]
+}

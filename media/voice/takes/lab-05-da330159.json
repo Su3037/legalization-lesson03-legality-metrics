@@ -1,0 +1,19 @@
+{
+ "key": "lab-05-da330159",
+ "text": "选中 B，按一下左方向键，B 压到 A 上，马上又不合法了。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 6.281,
+ "gaps": [
+  [
+   2.58,
+   2.76
+  ],
+  [
+   4.08,
+   4.26
+  ]
+ ]
+}

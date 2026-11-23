@@ -11,14 +11,16 @@ Status as of 2026-11-23. "Pass" means the check ran and met its bar; "Fail" mean
 | OpenROAD `check_placement` agreement | Same violation set on rules both implement; every mismatch explained | **Pass** | Mutants + gcd GP/DP + three injected faults, `oracles/openroad/real-design.json`; OpenROAD 2.0-12381-g01bba3695 (ORFS not used, D09) |
 | ICCAD 2017 evaluator on one case | agreement or documented reason | **Not run** | Contest site blocked from this environment (D10) |
 | CP-SAT optimum and heuristic gaps | table | **Pass** | `oracles/cpsat/results.json`, `docs/oracles.md` |
-| Voice: objective screens | CER ≤ 3% on two ASRs, lexicon 100%, rate 3.8–4.8 | **Fail** | Best Kokoro f20: CER 4.3–5.0% (`docs/voice-casting.md`) |
+| Voice: objective screens | CER ≤ 3% on two ASRs, lexicon 100%, rate 3.8–4.8 | **Fail (shipped anyway, D17)** | Kokoro f20: CER 4.3–5.0% (`docs/voice-casting.md`); narrated at the author's request and disclosed as synthetic |
 | Voice: blind listener test | ≥ 8 native listeners, MOS ≥ 4.0, < 30% "machine" | **Not run** | Page ready at `/listen/`; needs listeners and a human reference |
-| Voice: full-film pronunciation log | native listener log | **Not run** | No voice |
+| Voice: full-film pronunciation log | native listener log | **Not run** | Needs a native listener for the 精讲 and 实验演示 takes |
 | Audio loudness / true peak | −16 LUFS, −1 dBTP | **Not applicable** | Film is silent; screening clips were level-matched to ≈ −16 LUFS / −1.3 dBTP |
 | Captions | ≤ 16 chars/line, ≤ 2 lines, ≤ 9 chars/s, WebVTT + burned-in | **Pass** | 76 captions, max line 16 (`scripts/build-film-data.mjs`); `film.zh.vtt`; `film.zh.captioned.mp4` |
 | Film determinism | `renderAt(t)` equal after jumps and on a fresh page | **Pass** | `scripts/film-stills.mjs` → `repeatedEqual`, `freshEqual` true |
 | Film encode | 1920×1080, 30 fps, H.264, decodes without errors | **Pass** | 373.9 s captioned 8.3 MB, clean 7.1 MB; sample 32.6 s; `ffmpeg -v error -f null` empty |
-| Sample before full film (with chosen voice) | sample passes every voice gate first | **Fail / adapted** | No voice passed; the 32 s sample and full film were made silent, as the brief allows when no voice passes |
+| Sample before full film (with chosen voice) | sample passes every voice gate first | **Superseded** | The author asked for the house four-film set with narration and music (D17, D18); see the loudness row |
+| Loudness | −16 LUFS integrated, ≤ −1 dBTP | **Partial** | True peak ≤ −1.5 dBTP on all films; integrated −17 / −18.1 / −22 (score only) / −18.6 LUFS (`media/renders/*.audio.json`) |
+| House style | page, films and slides match placement-lab02-hpwl | **Pass (visual review)** | Before/after screenshots in the thread; D16 |
 | Learner pre/post and think-aloud | run with 3–5 learners or "not run" | **Not run** | `docs/learner-study.md`, `/study/` |
 | Teacher feedback T01–T24 mapped to checks | table | **Pass** | `docs/teacher-feedback.md` |
 | Slides | 10–14, page numbers, notes, PDF | **Pass** | 12 slides, `Module 03 · p / 12`, notes on `/slides/`, PDF 12 pages; overflow check 0 |

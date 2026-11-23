@@ -1,0 +1,19 @@
+{
+ "key": "lab-08-52c53296",
+ "text": "Abacus light把 B 和 C 挪到上下两行：位移只有 4，半周长线长却是 38。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 7.686,
+ "gaps": [
+  [
+   3.18,
+   3.36
+  ],
+  [
+   4.82,
+   4.98
+  ]
+ ]
+}

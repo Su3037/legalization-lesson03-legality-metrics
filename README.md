@@ -7,16 +7,26 @@ compare legal results by displacement and centre-pin HPWL.
 
 **Site:** https://su3037.github.io/legalization-lesson03-legality-metrics/
 
-| Part | Where |
+The site follows the author's course house style (same as `placement-lab02-hpwl` and `learning-clustering`):
+one page, warm paper and ink, numbered sections, dark cinema bands for the films and the lab, Newsreader /
+Noto Serif SC / Noto Sans SC / JetBrains Mono (bundled, OFL).
+
+| Section | What |
 | --- | --- |
-| Lesson (11 sections, every figure checked by the same checker) | `/lesson/` |
-| Film, 6:14, 15 chapters, **silent with burned-in captions** (see below) + clean cut with WebVTT; 32 s sample | `/film/`, `media/renders/` |
-| Live checker: drag/keyboard editing, step-through with pseudocode-line highlight, presets, fixed toggle, immutable displacement reference, repairs vs. CP-SAT optimum, open any film frame in the lab | `/lab/` |
-| 10 challenges (each targets one misconception, graded on state, many answers accepted) + 8-item concept inventory (pre/post) | `/challenges/` |
-| 12 slides with page numbers and notes, PDF | `/slides/`, `slides/out/legality-metrics-slides.pdf` |
-| Python exercise: starter / reference / 24 fixtures / `check.py` → PASS · INCOMPLETE · FAIL | `/python/`, `python/exercise/` |
-| Verification, gate table, credits | `/verify/`, `docs/acceptance.md` |
-| Blind listening test and learner-study pages (ready, not yet run) | `/listen/`, `/study/` |
+| 01 目标与问题 | outcomes; input / output / constraints / goal / assumptions / stop |
+| 02 影片 | four films: **科普** 3:09 cut to *We Never (Remix)*; **精讲** 4:34 Kokoro narration + original score; **进阶** 3:23 captions + score; **实验演示** 1:54 narrated walkthrough recorded from the real lab. Chapters, transcript, “open this frame in the lab” |
+| 03 讲解 | 03.1–03.9: terms, five rules, checker, rounding, metrics, conventions, repairs vs CP-SAT, sum vs max, real checkers; every figure checked by the same checker |
+| 04 课件 | 12 slides with notes, PDF (`slides/out/legality-metrics-slides.pdf`) |
+| 05 实验台 | live checker: drag/keyboard, step-through with pseudocode highlight, presets, fixed toggle, immutable reference, repairs vs CP-SAT optimum |
+| 06 挑战 | 10 challenges, each targets one misconception, graded on state |
+| 07 自测 | 8 self-check questions with explanations (the pre/post study form is on `/study/`) |
+| 08 Python | starter / reference / 24 fixtures / `check.py` → PASS · INCOMPLETE · FAIL |
+| 09 易错点 | eight misconceptions with checker counterexamples; limits of the lesson |
+| 10 复现与来源 | reproduction, oracles, sources, music and voice credits |
+
+Auxiliary pages: `/verify/` (gate table, voice and loudness, credits), `/listen/` (blind listening test, ready),
+`/study/` (learner study, ready). The old URLs `/lesson/`, `/film/`, `/lab/`, `/challenges/`, `/slides/`,
+`/python/` redirect to their sections.
 
 ## The checker
 
@@ -42,16 +52,18 @@ displacement from a named immutable reference and centre-pin HPWL.
 
 ## What did not pass or was not run
 
-* **Voice:** no open voice reachable here passed the objective screen (best: Kokoro, CER 4.3–5.0% vs
-  the 3% gate), so the film ships silent with captions, as the brief requires. Newer candidates need
-  Hugging Face (blocked here) or a paid key. The blind listening test page is ready but has not been
-  run (needs ≥ 8 native listeners and a human reference recording). See
-  [`docs/voice-casting.md`](docs/voice-casting.md).
+* **Voice:** the 精讲 and 实验演示 films are narrated by **Kokoro** (multi-lang v1.1, speaker 20, Apache-2.0),
+  synthesized one whole paragraph per chapter with the course pronunciation lexicon. It does **not** pass the
+  pre-registered objective screen (CER 4.3–5.0% on three ASR models vs the 3% gate); it ships because the author
+  asked for narrated films, and the page, the verify page and every end card say it is synthetic. Captions and
+  transcripts are the reference. The blind listening test page is ready as the upgrade path (needs ≥ 8 native
+  listeners and a human reference). See [`docs/voice-casting.md`](docs/voice-casting.md).
+* **Loudness:** true peak ≤ −1.5 dBTP on every film; integrated −17 to −18.6 LUFS, 1–2.6 dB under the −16 LUFS target
+  (the score-only 进阶 film is −22 LUFS).
 * **Learner study and animatic screening:** not run (needs real learners). Protocol and forms are ready:
   [`docs/learner-study.md`](docs/learner-study.md).
 * **ICCAD 2017 evaluator:** unavailable (contest site blocked).
-* **Lexicon** (`media/lexicon.zh.tsv`) awaits a native speaker's confirmation; it matters once there is
-  a voice.
+* **Lexicon** (`media/lexicon.zh.tsv`) awaits a native speaker's confirmation.
 * English edition: not made (only after every gate passes).
 
 ## Reproduce

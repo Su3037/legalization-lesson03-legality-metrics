@@ -1,0 +1,27 @@
+{
+ "key": "lab-10-9af7f0f1",
+ "text": "影片里的任意一帧，都可以点“在实验台打开这一帧”，把同一张布局带到这里重新检查。现在，轮到你了。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 10.585,
+ "gaps": [
+  [
+   1.94,
+   2.12
+  ],
+  [
+   3.62,
+   3.76
+  ],
+  [
+   5.12,
+   5.3
+  ],
+  [
+   8.64,
+   8.8
+  ]
+ ]
+}

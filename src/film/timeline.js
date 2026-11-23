@@ -29,7 +29,7 @@ export function buildWorld(data) {
   const inst = data.cpsat.instances;
   const optSeed = inst.find((i) => i.name.includes("overlap seed") && i.fixed_D);
   const optFloat = inst.find((i) => i.name.includes("float") && i.fixed_D);
-  return { design, free, seed, gold, float: data.raw.starter_float, snapped, orm, lite, trade, tradeData: data.trade, optSeed, optFloat, gcd: data.gcd };
+  return { design, free, seed, gold, float: data.raw.starter_float, snapped, orm, lite, trade, tradeData: data.trade, optSeed, optFloat, gcd: data.gcd, walk: data.walk || null };
 }
 
 // Keyframe helper: list of [beatTimeOrNull, state]; placement moves ease over `dur` seconds.
@@ -45,6 +45,31 @@ function track(t, frames, dur = 0.9) {
   out.kf = i;
   return out;
 }
+
+// Title, end card and the recorded lab walkthrough (no board).
+const SPECIAL = {
+  title(W, t, b, cue, clock) {
+    const hits = (clock.track && clock.track.hits) || [];
+    const n = hits.filter((h) => h <= t).length;
+    return { board: null, panel: { kind: "title", pieces: hits.length ? Math.min(4, Math.ceil((n * 4) / hits.length)) : 4 } };
+  },
+  end(W, t, b, cue, clock) {
+    return { board: null, panel: { kind: "end", credit: clock.credit || "" } };
+  },
+  walk(W, t, b, cue, clock) {
+    const i = cue.step;
+    const rec = W.walk && W.walk.steps[i];
+    const local = t - cue.start;
+    if (!rec) return { board: null, walk: { i, n: clock.walk.length, missing: true }, panel: { kind: "walk", title: cue.title, i, n: clock.walk.length } };
+    const prev = i > 0 && W.walk.steps[i - 1] ? W.walk.steps[i - 1].target : [rec.viewport.w * 0.5, rec.viewport.h * 0.6];
+    const p = ease(clamp01((local - 0.2) / 0.8));
+    const moved = rec.actions > 0;
+    const cursor = [R(prev[0] + (rec.target[0] - prev[0]) * p), R(prev[1] + (rec.target[1] - prev[1]) * p)];
+    const click = moved && local >= 1.05 && local < 1.55 ? R((local - 1.05) / 0.5) : null;
+    const shot = moved && local >= 1.1 ? rec.after : rec.before;
+    return { board: null, walk: { i, n: W.walk.steps.length, shot, viewport: rec.viewport, cursor, click, url: W.walk.url }, panel: { kind: "walk", title: cue.title, i, n: W.walk.steps.length } };
+  },
+};
 
 // Each scene returns { board: {...state for renderBoard}, design, panel: {...}, title }.
 const SCENES = {
@@ -172,8 +197,7 @@ export function stateAt(W, clock, t) {
   let ci = 0;
   for (let i = 0; i < cues.length; i++) if (cues[i].start <= t) ci = i;
   const cue = cues[ci];
-  const local = t; // beats are absolute times
-  const sc = SCENES[cue.id](W, local, cue.beats);
+  const sc = SPECIAL[cue.id] ? SPECIAL[cue.id](W, t, cue.beats, cue, clock) : SCENES[cue.id](W, t, cue.beats);
   const design = sc.design || W.design;
   const b = sc.board;
   let report = null;
@@ -193,7 +217,11 @@ export function stateAt(W, clock, t) {
     report,
     panel: sc.panel,
     gcd: sc.gcd || false,
+    walk: sc.walk || null,
     cueStart: cue.start,
+    film: clock.label || "",
+    cueIndex: ci,
+    cueCount: cues.length,
   };
 }
 

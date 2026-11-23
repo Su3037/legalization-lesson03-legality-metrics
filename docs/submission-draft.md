@@ -18,7 +18,8 @@ What it covers:
   max) from a named, fixed reference, and centre-pin HPWL.
 - A live checker with step-through and pseudocode-line highlighting, a fixed-cell toggle, and repair
   comparisons (greedy snap, overlap removal, Abacus-lite, a small Abacus, and the exact optimum).
-- A 6-minute captioned film whose every frame can be opened in the live checker, 12 slides (PDF),
+- Four short films (a music-cut overview, a narrated explanation, a captioned deep-dive, and a narrated
+  walkthrough of the live checker); any frame can be opened in the live checker. 12 slides (PDF),
   10 challenges graded on the resulting placement, an 8-item concept inventory, and a Python exercise
   that reports PASS / INCOMPLETE / FAIL.
 
@@ -30,9 +31,9 @@ How it was checked:
 - OpenROAD `check_placement` agrees on every case it can express, including OpenROAD's `gcd` design
   before and after detailed placement and a copy with three injected faults.
 
-Not done yet: the film has no narration (no synthetic voice passed our clarity screen, so I kept the
-captioned silent version rather than ship a machine voice); the blind listening test and a small
-learner study are prepared but not run.
+Known limits: the narration is an open-source synthetic voice (Kokoro). It is labelled as synthetic and
+misses our own clarity target (4–5% character error against a 3% goal), so the captions and transcripts
+are the reference. A blind listening test and a small learner study are prepared but not run.
 
 The lesson adapts your Module 01-03 material (CC BY 4.0) with attribution; new code is MIT and new
 content CC BY 4.0. Feedback on scope, length and wording is very welcome.

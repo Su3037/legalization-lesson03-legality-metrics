@@ -1,6 +1,7 @@
 // End-to-end check of the built or deployed site.
 // SITE_URL=https://su3037.github.io/legalization-lesson03-legality-metrics/ node tests/e2e/site.mjs [out.json]
-// Exercises every page, the live checker, a challenge, film-to-lab transfer, and runs axe-core.
+// Exercises the one-page lesson and the auxiliary pages: four films, the live checker, challenges, quiz,
+// film-to-lab transfer, old-URL redirects, downloads, and runs axe-core.
 import { chromium } from "../../scripts/pw.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
@@ -8,7 +9,7 @@ import { createRequire } from "node:module";
 
 const BASE = (process.env.SITE_URL || "http://127.0.0.1:8803/legalization-lesson03-legality-metrics/").replace(/\/?$/, "/");
 const axeSrc = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
-const PAGES = ["", "lesson/", "film/", "lab/", "challenges/", "slides/", "python/", "verify/", "listen/", "study/"];
+const PAGES = ["", "verify/", "listen/", "study/"];
 const results = { base: BASE, at: new Date().toISOString(), pages: {}, checks: {} };
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -27,6 +28,7 @@ for (const [scheme, p] of [...PAGES.map((p) => ["light", p]), ...PAGES.map((p) =
   page.on("console", (m) => m.type() === "error" && errs.push(m.text()));
   page.on("response", (r) => r.status() >= 400 && errs.push(`${r.status()} ${r.url()}`));
   await page.goto(BASE + p, { waitUntil: "networkidle" });
+  if (!p) await page.waitForFunction(() => window.appReady === true || window.appError, null, { timeout: 30000 });
   await page.waitForTimeout(400);
   await page.addScriptTag({ content: axeSrc });
   const axe = await page.evaluate(async () => {
@@ -46,7 +48,7 @@ for (const [scheme, p] of [...PAGES.map((p) => ["light", p]), ...PAGES.map((p) =
   const ph = await browser.newContext({ viewport: { width: 375, height: 800 }, deviceScaleFactor: 1 });
   const page = await ph.newPage();
   const bad = [];
-  for (const p of ["", "lesson/", "lab/", "challenges/", "film/"]) {
+  for (const p of ["", "verify/", "study/"]) {
     await page.goto(BASE + p, { waitUntil: "networkidle" });
     if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) bad.push(p || "/");
   }
@@ -54,70 +56,74 @@ for (const [scheme, p] of [...PAGES.map((p) => ["light", p]), ...PAGES.map((p) =
   await ph.close();
 }
 
-// live checker
+// live checker (section 05 of the one page)
 {
   const page = await ctx.newPage();
-  await page.goto(BASE + "lab/", { waitUntil: "networkidle" });
-  await page.waitForFunction(() => window.labReady === true);
+  await page.goto(BASE, { waitUntil: "networkidle" });
+  await page.waitForFunction(() => window.appReady === true);
+  await page.waitForTimeout(200);
   const v0 = await page.locator("#verdict").innerText();
   ok("lab: overlap seed is illegal with 3 violations", /不合法/.test(v0) && /3 条违规/.test(v0), v0.replace(/\n/g, " "));
   await page.selectOption("#preset", "legal");
   const v1 = await page.locator("#verdict").innerText();
   ok("lab: legal preset is legal", /✓ 合法/.test(v1), v1.replace(/\n/g, " "));
-  // keyboard move B one site left onto A -> overlap
   await page.locator('#board .cell[data-id="B"]').focus();
   await page.keyboard.press("ArrowLeft");
-  const snapOn = await page.locator("#snap").isChecked();
-  if (!snapOn) await page.keyboard.press("ArrowLeft");
+  if (!(await page.locator("#snap").isChecked())) await page.keyboard.press("ArrowLeft");
   const v2 = await page.locator("#verdict").innerText();
   ok("lab: keyboard move B left makes OVERLAP A/B", /不合法/.test(v2), v2.replace(/\n/g, " "));
-  // fixed toggle
   await page.selectOption("#preset", "fixedmoved");
   const v3 = await page.locator("#verdict").innerText();
   await page.locator("#fixed").uncheck();
   const v4 = await page.locator("#verdict").innerText();
   ok("lab: fixed toggle flips the verdict", /✗ 不合法/.test(v3) && /✓ 合法/.test(v4), `${v3.split("\n")[0]} → ${v4.split("\n")[0]}`);
-  // step-through highlights pseudocode
   await page.locator("#fixed").check();
   await page.locator("#stepbtn").click();
   await page.locator("#stepbtn").click();
-  const on = await page.locator("#pseudo li.on").count();
-  ok("lab: step-through highlights a pseudocode line", on === 1);
-  await page.close();
-}
-
-// challenge graded on state: c2 (touching is legal)
-{
-  const page = await ctx.newPage();
-  await page.goto(BASE + "challenges/", { waitUntil: "networkidle" });
-  await page.waitForFunction(() => window.challengesReady === true);
-  const n = await page.locator("article.challenge").count();
-  ok("challenges: 10 challenges rendered", n === 10, String(n));
-  const inv = await page.locator(".inventory fieldset").count();
-  ok("challenges: concept inventory has 8 items", inv === 8, String(inv));
-  await page.close();
-}
-
-// film-to-lab transfer at a c11 frame
-{
-  const page = await ctx.newPage();
-  await page.goto(BASE + "film/", { waitUntil: "networkidle" });
-  const dur = await page.evaluate(() => new Promise((res) => { const v = document.getElementById("v"); if (v.readyState >= 1) res(v.duration); else v.addEventListener("loadedmetadata", () => res(v.duration)); }));
-  ok("film: video metadata loads", dur > 300, `duration ${dur}`);
-  await page.evaluate(() => new Promise((res) => { const v = document.getElementById("v"); v.addEventListener("seeked", res, { once: true }); v.currentTime = 262; }));
+  ok("lab: step-through highlights a pseudocode line", (await page.locator("#pseudo li.on").count()) === 1);
+  // challenges and quiz
+  ok("challenges: 10 challenges rendered", (await page.locator("article.challenge").count()) === 10);
+  const q = page.locator(".quiz-item");
+  ok("quiz: 8 self-check items", (await q.count()) === 8, String(await q.count()));
+  await q.first().locator('input[value="1"]').check();
+  const fb = await q.first().locator(".fb").innerText();
+  ok("quiz: correct answer gets an explanation", /✓/.test(fb), fb);
+  // slides viewer
+  await page.locator('#slides [data-a="next"]').click();
+  ok("slides: viewer pages with notes", /p2 \/ 12/.test(await page.locator("#slides .slide-page").innerText()) && (await page.locator("#slides .slide-notes-text").innerText()).length > 5);
+  // four films: each loads with metadata
+  const cards = page.locator(".film-card");
+  ok("films: four film cards", (await cards.count()) === 4);
+  for (let i = 0; i < 4; i++) {
+    await cards.nth(i).click();
+    const dur = await page.evaluate(() => new Promise((res) => { const v = document.getElementById("v"); if (v.readyState >= 1) res(v.duration); else v.addEventListener("loadedmetadata", () => res(v.duration), { once: true }); }));
+    const label = await cards.nth(i).locator(".num").innerText();
+    ok(`film ${label}: video metadata loads`, dur > 100, `duration ${dur}`);
+  }
+  // film -> lab: the 精讲 film near the end of its two-repairs chapter
+  await cards.nth(1).click();
+  const t = await page.evaluate(async () => { const c = await (await fetch("media/films/concise.clock.zh.json")).json(); const cue = c.cues.find((x) => x.id === "c11"); return cue.end - 1; });
+  await page.evaluate((t) => new Promise((res) => { const v = document.getElementById("v"); const go = () => { v.addEventListener("seeked", res, { once: true }); v.currentTime = t; }; if (v.readyState >= 1) go(); else v.addEventListener("loadedmetadata", go, { once: true }); }), t);
   await page.locator("#to-lab").click();
-  await page.waitForURL(/lab\/#state=/);
-  await page.waitForFunction(() => window.labReady === true);
+  await page.waitForTimeout(300);
   const note = await page.locator("#film-note").innerText();
-  const v = await page.locator("#verdict").innerText();
-  ok("film→lab: frame opens in the lab and is re-checked", /来自影片 262/.test(note) && /✓ 合法/.test(v), `${note.slice(0, 40)} / ${v.split("\n")[0]}`);
+  const vv = await page.locator("#verdict").innerText();
+  ok("film→lab: frame opens in the lab and is re-checked", /来自《精讲》/.test(note) && /✓ 合法/.test(vv), `${note.slice(0, 40)} / ${vv.split("\n")[0]}`);
+  await page.close();
+}
+
+// old multi-page URLs redirect into the one page
+{
+  const page = await ctx.newPage();
+  await page.goto(BASE + "lab/", { waitUntil: "networkidle" });
+  ok("redirect: lab/ lands on the one-page #lab", page.url().endsWith("/#lab"), page.url());
   await page.close();
 }
 
 // downloads exist
 {
   const page = await ctx.newPage();
-  for (const f of ["slides/out/legality-metrics-slides.pdf", "downloads/module03-python-exercise.zip", "media/renders/sample.zh.captioned.mp4", "media/film/film.zh.vtt", "downloads/module03-outline.md", "media/renders/film.zh.captioned.mp4"]) {
+  for (const f of ["slides/out/legality-metrics-slides.pdf", "downloads/module03-python-exercise.zip", "downloads/module03-outline.md", ...["story", "concise", "advanced", "lab"].flatMap((f) => [`media/renders/${f}.zh.mp4`, `media/films/${f}.zh.vtt`])]) {
     const r = await page.request.get(BASE + f);
     ok(`download ${f}`, r.ok(), String(r.status()));
   }

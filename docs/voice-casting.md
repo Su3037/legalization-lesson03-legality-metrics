@@ -1,3 +1,8 @@
+> **Update (D17):** the author asked for narrated films. The 精讲 and 实验演示 films now ship with **Kokoro f20**
+> (patched lexicon), synthesized one whole paragraph per chapter by `scripts/voice_takes.py`; caption boundaries
+> snap to the pauses measured inside each take. The objective screen below still **fails** (CER 4.3–5.0% vs 3%);
+> the voice is disclosed as synthetic everywhere it is used, and the listening test remains the upgrade path.
+
 # Voice casting
 
 **Outcome: no voice passed the pre-registered gates, so v1 ships the silent captioned cut.** The gates

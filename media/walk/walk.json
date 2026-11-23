@@ -1,0 +1,146 @@
+{
+ "url": "su3037.github.io/legalization-lesson03-legality-metrics/#lab",
+ "recordedFrom": "the built lesson page (scripts/record-walk.mjs)",
+ "steps": [
+  {
+   "title": "打开实验台",
+   "before": "01-before.png",
+   "after": "01-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    1018,
+    448
+   ],
+   "actions": 0
+  },
+  {
+   "title": "逐步检查",
+   "before": "02-before.png",
+   "after": "02-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    929,
+    448
+   ],
+   "actions": 4
+  },
+  {
+   "title": "违规清单",
+   "before": "03-before.png",
+   "after": "03-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    1018,
+    448
+   ],
+   "actions": 2
+  },
+  {
+   "title": "合法的布局",
+   "before": "04-before.png",
+   "after": "04-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    223,
+    448
+   ],
+   "actions": 1
+  },
+  {
+   "title": "用键盘移动",
+   "before": "05-before.png",
+   "after": "05-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    313,
+    448
+   ],
+   "actions": 3
+  },
+  {
+   "title": "固定约束",
+   "before": "06-before.png",
+   "after": "06-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    454,
+    448
+   ],
+   "actions": 2
+  },
+  {
+   "title": "行内推开",
+   "before": "07-before.png",
+   "after": "07-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    920,
+    448
+   ],
+   "actions": 3
+  },
+  {
+   "title": "挪到上下两行",
+   "before": "08-before.png",
+   "after": "08-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    1093,
+    448
+   ],
+   "actions": 2
+  },
+  {
+   "title": "精确最优之一",
+   "before": "09-before.png",
+   "after": "09-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    1075,
+    448
+   ],
+   "actions": 2
+  },
+  {
+   "title": "从影片到实验台",
+   "before": "10-before.png",
+   "after": "10-after.png",
+   "viewport": {
+    "w": 1380,
+    "h": 776
+   },
+   "target": [
+    179,
+    448
+   ],
+   "actions": 0
+  }
+ ]
+}

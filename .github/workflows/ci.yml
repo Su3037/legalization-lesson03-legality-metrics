@@ -28,6 +28,8 @@ jobs:
         run: |
           python python/exercise/check.py --impl reference | tail -1 | grep -q '^PASS'
           python python/exercise/check.py | tail -1 | grep -q '^INCOMPLETE'
+      - name: Film clocks are reproducible from the scripts and the committed voice takes
+        run: node scripts/build-films.mjs && git diff --exit-code media/films
       - name: Build site
         run: node scripts/build-site.mjs
       - name: Site end-to-end and axe-core (local build)

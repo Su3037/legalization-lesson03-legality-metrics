@@ -1,0 +1,355 @@
+{
+ "id": "lab",
+ "label": "实验演示",
+ "title": "在实验台上走一遍",
+ "fps": 30,
+ "size": [
+  1920,
+  1080
+ ],
+ "rule": {
+  "offset": 0.35,
+  "pause": 0.9,
+  "walkOffset": 1.5,
+  "end": 6
+ },
+ "credit": "画面：本页实验台的真实截图 · 旁白：Kokoro 合成声音（Apache-2.0）· 配乐：原创（NumPy 生成）",
+ "kind": "walk",
+ "duration": 114.189,
+ "cues": [
+  {
+   "id": "walk",
+   "title": "打开实验台",
+   "start": 0,
+   "end": 12.299,
+   "captions": [
+    {
+     "start": 1.5,
+     "end": 4.02,
+     "lines": [
+      "这是课程页里的实验台。"
+     ]
+    },
+    {
+     "start": 4.02,
+     "end": 9.57,
+     "lines": [
+      "一打开，是开场那张重叠的布局：检查器说不合法，"
+     ]
+    },
+    {
+     "start": 9.57,
+     "end": 11.699,
+     "lines": [
+      "一共三条违规。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-01-029bbe8f.m4a",
+   "voiceAt": 1.5,
+   "voiceDuration": 9.899,
+   "step": 0
+  },
+  {
+   "id": "walk",
+   "title": "逐步检查",
+   "start": 12.299,
+   "end": 22.67,
+   "captions": [
+    {
+     "start": 13.799,
+     "end": 18.269,
+     "lines": [
+      "点逐步检查，伪代码会一行一行亮起来，"
+     ]
+    },
+    {
+     "start": 18.269,
+     "end": 22.07,
+     "lines": [
+      "画板上同时高亮正在检查的单元。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-02-47b14140.m4a",
+   "voiceAt": 13.799,
+   "voiceDuration": 7.971,
+   "step": 1
+  },
+  {
+   "id": "walk",
+   "title": "违规清单",
+   "start": 22.67,
+   "end": 32.328,
+   "captions": [
+    {
+     "start": 24.17,
+     "end": 28.86,
+     "lines": [
+      "点违规清单里的一条，相关的单元会被选中，"
+     ]
+    },
+    {
+     "start": 28.86,
+     "end": 31.728,
+     "lines": [
+      "重叠的区间也画了出来。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-03-fa697814.m4a",
+   "voiceAt": 24.17,
+   "voiceDuration": 7.258,
+   "step": 2
+  },
+  {
+   "id": "walk",
+   "title": "合法的布局",
+   "start": 32.328,
+   "end": 41.666,
+   "captions": [
+    {
+     "start": 33.828,
+     "end": 38.538,
+     "lines": [
+      "换成合法的示意布局，结论立刻变成合法，"
+     ]
+    },
+    {
+     "start": 38.538,
+     "end": 41.066,
+     "lines": [
+      "五条规则全部成立。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-04-fcc33204.m4a",
+   "voiceAt": 33.828,
+   "voiceDuration": 6.938,
+   "step": 3
+  },
+  {
+   "id": "walk",
+   "title": "用键盘移动",
+   "start": 41.666,
+   "end": 50.347,
+   "captions": [
+    {
+     "start": 43.166,
+     "end": 47.336,
+     "lines": [
+      "选中 B，按一下左方向键，B 压到 A 上，"
+     ]
+    },
+    {
+     "start": 47.336,
+     "end": 49.747,
+     "lines": [
+      "马上又不合法了。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-05-da330159.m4a",
+   "voiceAt": 43.166,
+   "voiceDuration": 6.281,
+   "step": 4
+  },
+  {
+   "id": "walk",
+   "title": "固定约束",
+   "start": 50.347,
+   "end": 63.226,
+   "captions": [
+    {
+     "start": 51.847,
+     "end": 56.897,
+     "lines": [
+      "再看固定约束。D 被挪走了，所以不合法；"
+     ]
+    },
+    {
+     "start": 56.897,
+     "end": 62.626,
+     "lines": [
+      "关掉固定约束，同一张布局，结论就翻了过来。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-06-74311cfb.m4a",
+   "voiceAt": 51.847,
+   "voiceDuration": 10.479,
+   "step": 5
+  },
+  {
+   "id": "walk",
+   "title": "行内推开",
+   "start": 63.226,
+   "end": 73.679,
+   "captions": [
+    {
+     "start": 64.726,
+     "end": 70.656,
+     "lines": [
+      "回到开场布局，试试修复。行内依次推开：位移 6，"
+     ]
+    },
+    {
+     "start": 70.656,
+     "end": 73.079,
+     "lines": [
+      "半周长线长 32。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-07-19e67a28.m4a",
+   "voiceAt": 64.726,
+   "voiceDuration": 8.053,
+   "step": 6
+  },
+  {
+   "id": "walk",
+   "title": "挪到上下两行",
+   "start": 73.679,
+   "end": 83.765,
+   "captions": [
+    {
+     "start": 75.179,
+     "end": 80.079,
+     "lines": [
+      "Abacus-lite把 B 和 C 挪到上下两行：位移只有 4，"
+     ]
+    },
+    {
+     "start": 80.079,
+     "end": 83.165,
+     "lines": [
+      "半周长线长却是 38。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-08-52c53296.m4a",
+   "voiceAt": 75.179,
+   "voiceDuration": 7.686,
+   "step": 7
+  },
+  {
+   "id": "walk",
+   "title": "精确最优之一",
+   "start": 83.765,
+   "end": 95.204,
+   "captions": [
+    {
+     "start": 85.265,
+     "end": 90.955,
+     "lines": [
+      "再看精确最优之一：位移也是 4，但摆法不一样。"
+     ]
+    },
+    {
+     "start": 90.955,
+     "end": 94.604,
+     "lines": [
+      "最少位移的摆法，不止一种。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-09-df1b19f5.m4a",
+   "voiceAt": 85.265,
+   "voiceDuration": 9.039,
+   "step": 8
+  },
+  {
+   "id": "walk",
+   "title": "从影片到实验台",
+   "start": 95.204,
+   "end": 108.189,
+   "captions": [
+    {
+     "start": 96.704,
+     "end": 98.734,
+     "lines": [
+      "影片里的任意一帧，"
+     ]
+    },
+    {
+     "start": 98.734,
+     "end": 101.914,
+     "lines": [
+      "都可以点“在实验台打开这一帧”，"
+     ]
+    },
+    {
+     "start": 101.914,
+     "end": 107.589,
+     "lines": [
+      "把同一张布局带到这里重新检查。现在，轮到你了。"
+     ]
+    }
+   ],
+   "beats": {},
+   "voice": "media/voice/takes/lab-10-9af7f0f1.m4a",
+   "voiceAt": 96.704,
+   "voiceDuration": 10.585,
+   "step": 9
+  },
+  {
+   "id": "end",
+   "title": "片尾",
+   "start": 108.189,
+   "end": 114.189,
+   "captions": [],
+   "beats": {}
+  }
+ ],
+ "walk": [
+  {
+   "title": "打开实验台",
+   "target": "#verdict"
+  },
+  {
+   "title": "逐步检查",
+   "target": "#stepbtn"
+  },
+  {
+   "title": "违规清单",
+   "target": "#vlist .vbtn"
+  },
+  {
+   "title": "合法的布局",
+   "target": "#preset"
+  },
+  {
+   "title": "用键盘移动",
+   "target": "#board .cell[data-id=\"B\"]"
+  },
+  {
+   "title": "固定约束",
+   "target": "#fixed"
+  },
+  {
+   "title": "行内推开",
+   "target": "[data-repair=\"overlap\"]"
+  },
+  {
+   "title": "挪到上下两行",
+   "target": "[data-repair=\"lite\"]"
+  },
+  {
+   "title": "精确最优之一",
+   "target": "[data-repair=\"optimum\"]"
+  },
+  {
+   "title": "从影片到实验台",
+   "target": "#to-lab"
+  }
+ ]
+}

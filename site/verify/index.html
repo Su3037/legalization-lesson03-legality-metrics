@@ -17,9 +17,9 @@
 <tr><td>真实设计演示</td><td>gcd 全局/详细布局结论与 OpenROAD 一致</td><td class="pass">通过</td><td>见下文“gcd”</td></tr>
 <tr><td>影片确定性</td><td><code>renderAt(t)</code> 跳转与新页面结果相同</td><td class="pass">通过</td><td><code>scripts/film-stills.mjs</code></td></tr>
 <tr><td>字幕</td><td>每行 ≤ 16 字，≤ 2 行，≤ 9 字/秒</td><td class="pass">通过</td><td>76 条，最长 16 字</td></tr>
-<tr><td>配音客观筛查</td><td>两个独立识别器字错率 ≤ 3%，术语全对，语速 3.8–4.8 字/秒等</td><td class="fail">未通过</td><td>最好的 Kokoro 为 4.3–5.0%（见下文）</td></tr>
+<tr><td>配音客观筛查</td><td>两个独立识别器字错率 ≤ 3%，术语全对，语速 3.8–4.8 字/秒等</td><td class="fail">未通过</td><td>采用的 Kokoro 为 4.3–5.0%；按作者要求仍然发布，并在页面和片尾标明（见下文）</td></tr>
 <tr><td>配音盲听测试</td><td>≥ 8 位母语听众，自然度 ≥ 4.0，判为机器 &lt; 30%</td><td class="notrun">未进行</td><td>需要真人听众；测试页已就绪：<a href="{{BASE}}listen/">盲听测试</a></td></tr>
-<tr><td>响度</td><td>−16 LUFS / −1 dBTP</td><td class="notrun">不适用</td><td>本版影片无声；试听片段已对齐到 −16 LUFS</td></tr>
+<tr><td>响度</td><td>−16 LUFS / −1 dBTP</td><td class="pass">真峰值通过</td><td>真峰值 ≤ −1.5 dBTP；整体响度 −17 到 −18.6 LUFS，比目标低 1–2.6 dB（进阶片只有配乐，−22 LUFS）</td></tr>
 <tr><td>学习效果研究</td><td>前后测、挑战记录</td><td class="notrun">未进行</td><td>方案与表单已就绪：<a href="{{BASE}}study/">参与者页面</a></td></tr>
 <tr><td>网站端到端与无障碍</td><td>所有页面无错误；axe-core 无严重问题</td><td id="g-e2e" class="notrun">见仓库</td><td><code>tests/e2e/site.mjs</code>，结果在 <code>docs/acceptance.md</code></td></tr>
 </tbody></table></div>
@@ -36,8 +36,11 @@
 <h2 id="gcd">真实小设计：gcd（Nangate45）</h2>
 <div id="gcd-box" class="card"><p class="hint">载入中…</p></div>
 
-<h2 id="voice">配音：为什么这一版没有声音</h2>
-<p>以前几门课用逐句合成的配音，听起来不自然。这次按“整段合成 → 客观筛查 → 母语听众盲听”的流程选声音，门槛事先定好，不会事后放宽。在本环境能用的开源中文声音里，没有一个通过客观筛查（要求两个独立的语音识别器字错率都 ≤ 3%；我们用了三个，最好的声音在三个上都是 4.3–5.0%）。提示词里推荐的较新模型（CosyVoice3、Qwen3-TTS、VoxCPM2 等）需要从 Hugging Face 下载，本环境无法访问，也没有付费语音服务的密钥。因此按约定发布带字幕的无声版。如果以后有声音通过盲听测试，再替换音轨。</p>
+<h2 id="voice">旁白：用的是什么声音，有什么不足</h2>
+<p>《精讲》和《实验演示》两部影片有旁白，是开源合成声音 <b>Kokoro</b>（multi-lang v1.1，说话人 20，Apache-2.0），<b>按整段合成</b>（每一章一段，不是一句一句拼起来的），并把课程的发音词表（“行”读 háng、“重叠”读 chóng dié、HPWL 读“半周长线长”等）写进它自己的词典。字幕时间取自这段录音里真实的停顿位置。</p>
+<p><b>它没有通过我们事先定的客观门槛</b>：用三个独立的语音识别器回听，字错率是 4.3–5.0%，门槛是 ≤ 3%。剩下的错误多数是同音词（如“只是”被听成“指示”）和英文字母、数字的读法。所以：画面里的字幕和下面的文字稿以文字为准；旁白始终标明是合成的；我们不会克隆任何人的声音，除非本人书面同意。提示词里推荐的较新模型（CosyVoice3、Qwen3-TTS、VoxCPM2 等）需要从 Hugging Face 下载，本环境无法访问，也没有付费语音服务的密钥。</p>
+<p><b>升级路径</b>：<a href="{{BASE}}listen/">盲听测试页</a>已经就绪。只要有声音（包括真人录音）通过母语听众盲听，就替换音轨，影片时钟会按新录音的实际时长重新生成。</p>
+<p>配乐：《科普》按作者授权使用的曲目 We Never (Remix)（若如初见）· Hi Noise / 秋成 剪辑，录音不在仓库里；其余三部的配乐是 <code>scripts/music.py</code> 用 NumPy 生成的原创音乐，旁白下再压低 9 dB。混音响度：《科普》−17 LUFS，《精讲》−18.1 LUFS，《实验演示》−18.6 LUFS，真峰值都低于 −1 dBTP；《进阶》只有配乐，−22 LUFS。</p>
 <div class="tablewrap"><table><thead><tr><th>声音</th><th>修正词典</th><th>字错率（Paraformer / SenseVoice / Whisper）</th><th>声调拼音错误率</th><th>有声语速（字/秒）</th></tr></thead><tbody id="voice-t"></tbody></table></div>
 <p class="hint">剩下的错误多数是识别器把同音词听错（如“只是”听成“指示”）。我们修正了所有开源词典里把“一行”读成 yì xíng 的错误。合成声音一律会标明是合成的；不会克隆任何人的声音，除非本人书面同意。</p>
 
@@ -48,7 +51,8 @@
 <li>gcd 设计与 Nangate45 库来自 <a href="https://github.com/The-OpenROAD-Project/OpenROAD">OpenROAD</a> 的测试目录（BSD-3-Clause）；OpenROAD 2.0-12381-g01bba3695 用于对照。</li>
 <li>OR-Tools CP-SAT（Apache-2.0）用于精确最优。fast-check（MIT）、Hypothesis（MPL-2.0）、axe-core（MPL-2.0）、Playwright（Apache-2.0）用于测试。</li>
 <li>筛查用的语音模型：Kokoro（Apache-2.0）、MeloTTS（MIT）、Matcha（Databaker 数据，仅限非商业，所以只做了筛查，不会采用），通过 sherpa-onnx（Apache-2.0）运行；识别器 Paraformer、SenseVoice、Whisper。</li>
-<li>字体：系统字体（Noto Sans CJK，SIL OFL 1.1）。</li>
+<li>字体：Newsreader、Noto Serif SC、Noto Sans SC、Noto Sans、JetBrains Mono（SIL OFL 1.1，许可文件在 <code>fonts/</code>）。</li>
+<li>音乐：《科普》用 We Never (Remix)（若如初见）· Hi Noise / 秋成，作者授权使用，不属于本课程的 CC BY 许可，录音不在仓库里；其余配乐为原创（CC BY 4.0）。旁白：Kokoro 合成声音（Apache-2.0）。</li>
 </ul>
 </main>
 <!--FOOT-->

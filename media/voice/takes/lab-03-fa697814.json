@@ -1,0 +1,23 @@
+{
+ "key": "lab-03-fa697814",
+ "text": "点违规清单里的一条，相关的单元会被选中，重叠的区间也画了出来。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 7.258,
+ "gaps": [
+  [
+   2.12,
+   2.3
+  ],
+  [
+   4.6,
+   4.78
+  ],
+  [
+   6.0,
+   6.12
+  ]
+ ]
+}

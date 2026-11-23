@@ -12,7 +12,7 @@ const fig = (k) => F[k].svg;
 const tag = (k) => `<div class="chk ${F[k].ok ? "ok" : "bad"}">检查器：${F[k].verdict}</div>`;
 
 const SLIDES = [
-  { title: "合法吗？", body: `<div class="hero"><h1>合法吗？</h1><p class="sub">布局合法性检查与指标</p><p class="meta">Module 03 · Legality Metrics</p></div>${fig("seed")}`, cls: "title",
+  { title: "合法吗？", body: `<div class="hero"><p class="kicker">Legalization · Lesson 03</p><h1>合法吗<span>？</span></h1><p class="sub">布局合法性检查与指标</p><p class="meta">行 · 站点 · 重叠 · 位移 · HPWL</p></div>${fig("seed")}`, cls: "title",
     notes: "开场：全局布局给了坐标，但 A、B、C 挤在同一个位置。今天先学判断合不合法，再学怎么比较两个合法结果。" },
   { title: "行、站点、坐标、区间", body: `${fig("terms")}<ul><li>三行，行高 2，底边 y = 0、2、4</li><li>站点宽 1；坐标是左下角</li><li>A 在 (4, 2)，占 [4, 6)：左闭右开</li></ul>`,
     notes: "先统一术语。区间左闭右开是后面判断相接与重叠的关键。" },
@@ -38,19 +38,23 @@ const SLIDES = [
     notes: "误区 I8：玩具检查器通过不等于签核。最后把大家引向实验台和 Python 练习。" },
 ];
 
-const css = `@page{size:1920px 1080px;margin:0}*{box-sizing:border-box}body{margin:0;background:#0b0f17;font-family:"Noto Sans SC","Noto Sans CJK SC","WenQuanYi Zen Hei",sans-serif;color:#e6edf7}
-.slide{width:1920px;height:1080px;padding:70px 90px 80px;position:relative;page-break-after:always;overflow:hidden;background:#0e131c}
-.slide h2{font-size:58px;margin:0 0 30px;border-left:10px solid #ffd166;padding-left:22px}
-.slide p,.slide li{font-size:36px;line-height:1.5}.slide ul,.slide ol{margin:10px 0}
-.slide svg{width:100%;height:auto;max-height:640px;background:#0b0f17;border-radius:12px;display:block}
-.slide > div > svg{max-height:600px;width:auto;max-width:100%;margin:0 auto}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:40px}.two svg{max-height:440px;width:100%}
-.chk{display:inline-block;font-size:28px;margin-top:10px;padding:4px 16px;border-radius:30px;border:2px solid}.chk.ok{color:#3ccf8e;border-color:#3ccf8e}.chk.bad{color:#ff6b6b;border-color:#ff6b6b}
-.code li{font-family:"Noto Sans Mono",monospace;background:#151c29;margin:10px 0;padding:10px 18px;border-radius:8px;list-style-position:inside}
-.pn{position:absolute;right:60px;bottom:30px;font-size:26px;color:#9fb0cc}.foot{position:absolute;left:90px;bottom:30px;font-size:22px;color:#6f7f9a}
-.title{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:center}.title h2{display:none}.hero h1{font-size:150px;color:#ffd166;margin:0}.hero .sub{font-size:54px}.hero .meta{font-size:32px;color:#9fb0cc}
-.url{font-size:30px!important;color:#8ab4ff}`;
-const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>合法吗？课件</title><style>${css}</style></head><body>${SLIDES.map((s, i) => `<section class="slide ${s.cls || ""}" id="s${i + 1}"><h2>${s.title}</h2>${s.cls === "title" ? s.body : `<div>${s.body}</div>`}<div class="foot">合法吗？· Legality Metrics · CC BY 4.0</div><div class="pn">Module 03 · ${i + 1} / ${SLIDES.length}</div></section>`).join("")}</body></html>`;
+// House slide style (same family as the films and placement-lab02-hpwl): near-black blue-green, a thin teal rule
+// on top, serif titles with a gold underline, ivory text, page numbers pN/M in the footer.
+const css = `@page{size:1920px 1080px;margin:0}*{box-sizing:border-box}body{margin:0;background:#0a1b21;font-family:var(--sans);color:#eeeadd}
+.slide{width:1920px;height:1080px;padding:64px 92px 110px;position:relative;page-break-after:always;overflow:hidden;background:#0a1b21;border-top:6px solid #4f8f84}
+.slide h2{font:400 60px/1.2 var(--serif);margin:0 0 34px;letter-spacing:.02em}.slide h2::after{content:"";display:block;width:88px;height:3px;background:#ddbd78;margin-top:20px}
+.slide p,.slide li{font-size:35px;line-height:1.5}.slide ul,.slide ol{margin:10px 0;padding-left:0;list-style:none}
+.slide ul li{padding-left:36px;position:relative;margin-bottom:14px}.slide ul li::before{content:"";position:absolute;left:4px;top:.62em;width:11px;height:11px;border-radius:50%;background:#ddbd78}
+.slide svg{width:100%;height:auto;max-height:620px;background:#081a22;border-radius:8px;display:block}
+.slide > div > svg{max-height:500px;width:auto;max-width:100%;margin:0 auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px}.two svg{max-height:430px;width:100%}
+.chk{display:inline-block;font:400 26px var(--mono);margin-top:12px;padding:4px 16px;border-left:3px solid}.chk.ok{color:#76cbb5;border-color:#76cbb5}.chk.bad{color:#d99a9a;border-color:#d99a9a}
+.code{counter-reset:c}.code li{font:400 30px/1.5 var(--mono);background:#081a22;border:1px solid #1d3640;border-left:2px solid #ddbd78;margin:12px 0;padding:10px 20px;border-radius:6px;color:#d8e8d8}
+.pn{position:absolute;right:92px;bottom:30px;font:700 24px var(--mono);color:#c9d3cf}.foot{position:absolute;left:92px;right:92px;bottom:30px;font-size:22px;color:#8fa3a3;border-top:1px solid #1d3640;padding-top:14px}
+.title{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}.title h2{display:none}.hero .kicker{font:400 24px var(--mono);letter-spacing:.18em;color:#8fa3a3;text-transform:uppercase}.hero h1{font:400 170px/1.1 var(--serif);color:#eeeadd;margin:20px 0;letter-spacing:.08em}.hero h1 span{color:#ddbd78}.hero .sub{font:400 52px var(--serif)}.hero .meta{font:400 28px var(--mono);color:#76cbb5}
+.url{font:400 30px var(--mono)!important;color:#76cbb5}b{color:#ddbd78;font-weight:600}`;
+const fonts = "file://" + process.cwd() + "/site/assets/fonts.css";
+const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>合法吗？课件</title><link rel="stylesheet" href="${fonts}"><style>${css}</style></head><body>${SLIDES.map((s, i) => `<section class="slide ${s.cls || ""}" id="s${i + 1}"><h2>${s.title}</h2>${s.cls === "title" ? s.body : `<div>${s.body}</div>`}<div class="foot">Su3037 · Legalization Lesson 03 · 合法吗？ · CC BY 4.0</div><div class="pn">p${i + 1} / ${SLIDES.length}</div></section>`).join("")}</body></html>`;
 writeFileSync(`${OUT}/deck.html`, html);
 writeFileSync(`${OUT}/notes.json`, JSON.stringify(SLIDES.map((s, i) => ({ n: i + 1, title: s.title, notes: s.notes })), null, 1));
 

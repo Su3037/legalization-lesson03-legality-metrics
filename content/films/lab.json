@@ -1,0 +1,159 @@
+{
+ "id": "lab",
+ "kind": "walk",
+ "label": "实验演示",
+ "title": "在实验台上走一遍",
+ "why": "录下真实的实验台页面，一步一步演示：完整检查、逐步检查、违规清单、键盘移动、固定约束、三种修复。旁白是开源合成声音（Kokoro）。",
+ "credit": "画面：本页实验台的真实截图 · 旁白：Kokoro 合成声音（Apache-2.0）· 配乐：原创（NumPy 生成）",
+ "cues": [
+  {
+   "title": "打开实验台",
+   "text": "这是课程页里的实验台。｜一打开，是开场那张重叠的布局：｜检查器说不合法，｜一共三条违规。",
+   "actions": [],
+   "target": "#verdict"
+  },
+  {
+   "title": "逐步检查",
+   "text": "点逐步检查，｜伪代码会一行一行亮起来，｜画板上同时高亮正在检查的单元。",
+   "actions": [
+    [
+     "click",
+     "#stepbtn"
+    ],
+    [
+     "click",
+     "#stepbtn"
+    ],
+    [
+     "click",
+     "#stepbtn"
+    ],
+    [
+     "click",
+     "#stepbtn"
+    ]
+   ],
+   "target": "#stepbtn"
+  },
+  {
+   "title": "违规清单",
+   "text": "点违规清单里的一条，｜相关的单元会被选中，｜重叠的区间也画了出来。",
+   "actions": [
+    [
+     "click",
+     "#stepreset"
+    ],
+    [
+     "click",
+     "#vlist .vbtn"
+    ]
+   ],
+   "target": "#vlist .vbtn"
+  },
+  {
+   "title": "合法的布局",
+   "text": "换成合法的示意布局，｜结论立刻变成合法，｜五条规则全部成立。",
+   "actions": [
+    [
+     "select",
+     "#preset",
+     "legal"
+    ]
+   ],
+   "target": "#preset"
+  },
+  {
+   "title": "用键盘移动",
+   "text": "选中 B，｜按一下左方向键，｜B 压到 A 上，｜马上又不合法了。",
+   "actions": [
+    [
+     "focus",
+     "#board .cell[data-id=\"B\"]"
+    ],
+    [
+     "key",
+     "ArrowLeft"
+    ],
+    [
+     "key",
+     "ArrowLeft"
+    ]
+   ],
+   "target": "#board .cell[data-id=\"B\"]"
+  },
+  {
+   "title": "固定约束",
+   "text": "再看固定约束。｜D 被挪走了，｜所以不合法；｜关掉固定约束，｜同一张布局，｜结论就翻了过来。",
+   "actions": [
+    [
+     "select",
+     "#preset",
+     "fixedmoved"
+    ],
+    [
+     "uncheck",
+     "#fixed"
+    ]
+   ],
+   "target": "#fixed"
+  },
+  {
+   "title": "行内推开",
+   "text": "回到开场布局，｜试试修复。｜行内依次推开：｜位移 6，｜半周长线长 32。",
+   "actions": [
+    [
+     "check",
+     "#fixed"
+    ],
+    [
+     "select",
+     "#preset",
+     "overlap"
+    ],
+    [
+     "click",
+     "[data-repair=\"overlap\"]"
+    ]
+   ],
+   "target": "[data-repair=\"overlap\"]"
+  },
+  {
+   "title": "挪到上下两行",
+   "text": "Abacus-lite｜把 B 和 C 挪到上下两行：｜位移只有 4，｜半周长线长却是 38。",
+   "actions": [
+    [
+     "select",
+     "#preset",
+     "overlap"
+    ],
+    [
+     "click",
+     "[data-repair=\"lite\"]"
+    ]
+   ],
+   "target": "[data-repair=\"lite\"]"
+  },
+  {
+   "title": "精确最优之一",
+   "text": "再看精确最优之一：｜位移也是 4，｜但摆法不一样。｜最少位移的摆法，｜不止一种。",
+   "actions": [
+    [
+     "select",
+     "#preset",
+     "overlap"
+    ],
+    [
+     "click",
+     "[data-repair=\"optimum\"]"
+    ]
+   ],
+   "target": "[data-repair=\"optimum\"]"
+  },
+  {
+   "title": "从影片到实验台",
+   "text": "影片里的任意一帧，｜都可以点“在实验台打开这一帧”，｜把同一张布局带到这里重新检查。｜现在，轮到你了。",
+   "actions": [],
+   "target": "#to-lab"
+  }
+ ]
+}

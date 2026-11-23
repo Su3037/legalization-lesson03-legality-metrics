@@ -1,0 +1,23 @@
+{
+ "key": "lab-02-47b14140",
+ "text": "点逐步检查，伪代码会一行一行亮起来，画板上同时高亮正在检查的单元。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 7.971,
+ "gaps": [
+  [
+   1.46,
+   1.64
+  ],
+  [
+   3.28,
+   3.42
+  ],
+  [
+   4.38,
+   4.56
+  ]
+ ]
+}

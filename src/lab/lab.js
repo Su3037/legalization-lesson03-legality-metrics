@@ -359,26 +359,35 @@ export async function startLab(root, { base = "../" } = {}) {
     draw();
   });
 
-  // Film-to-lab transfer: #state=<base64 JSON> carries the exact frame state.
+  // Film-to-lab transfer: the player hands over the exact frame state (or #state=<base64 JSON> in the URL).
+  function loadFilmState(st) {
+    push();
+    S.placement = clonePlacement(st.placement);
+    S.fixedMode = st.fixedMode !== false;
+    if (st.reference) S.reference = { name: st.reference.name, placement: clonePlacement(st.reference.placement) };
+    S.selectedViolation = st.selectedViolation || null;
+    S.snapshot = st.snapshot || null;
+    S.trace = null;
+    S.step = -1;
+    const from = `来自${st.film ? `《${st.film}》` : "影片"} ${st.time} 秒`;
+    S.filmPartial = st.partial
+      ? `${from}：影片当时只检查到“${st.partial}”。上面的结论是实验台对同一布局重新做的完整检查。`
+      : `${from}的画面：坐标、固定约束和位移参考都原样带过来了，结论由实验台重新检查。`;
+    $("#fixed", root).checked = S.fixedMode;
+    const n = $("#film-note", root);
+    n.hidden = false;
+    n.textContent = S.filmPartial;
+    clearTimeout(flash.t);
+    draw();
+  }
   const m = location.hash.match(/state=([^&]+)/);
   if (m) {
     try {
-      const st = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));
-      S.placement = st.placement;
-      S.fixedMode = st.fixedMode !== false;
-      if (st.reference) S.reference = st.reference;
-      if (st.selectedViolation) S.selectedViolation = st.selectedViolation;
-      if (st.snapshot) S.snapshot = st.snapshot;
-      S.filmPartial = st.partial
-        ? `来自影片 ${st.time}s：影片当时只检查到“${st.partial}”。上面的结论是实验台对同一布局重新做的完整检查。`
-        : `来自影片 ${st.time}s 的画面：坐标、固定约束和位移参考都原样带过来了。`;
-      const n = $("#film-note", root);
-      n.hidden = false;
-      n.textContent = S.filmPartial;
+      loadFilmState(JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))));
     } catch (e) {
       flash("影片状态无法读取：" + e.message);
     }
   }
   draw();
-  return { state: S, draw, message };
+  return { state: S, draw, message, loadFilmState };
 }

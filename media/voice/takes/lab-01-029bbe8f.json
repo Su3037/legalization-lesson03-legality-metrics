@@ -1,0 +1,27 @@
+{
+ "key": "lab-01-029bbe8f",
+ "text": "这是课程页里的实验台。一打开，是开场那张重叠的布局：检查器说不合法，一共三条违规。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 9.899,
+ "gaps": [
+  [
+   2.44,
+   2.6
+  ],
+  [
+   3.26,
+   3.38
+  ],
+  [
+   5.8,
+   5.98
+  ],
+  [
+   7.98,
+   8.16
+  ]
+ ]
+}

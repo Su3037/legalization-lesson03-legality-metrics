@@ -1,0 +1,19 @@
+{
+ "key": "lab-04-fcc33204",
+ "text": "换成合法的示意布局，结论立刻变成合法，五条规则全部成立。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 6.938,
+ "gaps": [
+  [
+   2.26,
+   2.46
+  ],
+  [
+   4.62,
+   4.8
+  ]
+ ]
+}

@@ -10,19 +10,39 @@ const RULES = [
   ["FIXED", "固定单元不动", "只在声明固定时检查"],
 ];
 
+const CURSOR = '<path d="M0 0 L0 30 L8 23 L13.5 35 L18.5 33 L13 21.5 L23 21.5 Z" fill="#fffdf8" stroke="#0b1b1f" stroke-width="2" stroke-linejoin="round"/>';
+
 export function renderFrame(s, opts = {}) {
   const parts = [];
-  parts.push(`<header class="f-head"><span class="f-mod">Module 03 · Legality Metrics</span><span class="f-ch">${String(s.chapter).padStart(2, "0")} · ${s.title}</span></header>`);
-  let boardSvg = "";
-  if (s.gcd) boardSvg = gcdSvg(opts.gcd);
-  else if (s.board && s.board.placement) {
-    const st = { ...s.board, design: s.design, bad: s.report ? badMap(s.report) : s.board.bad, fixedMode: s.board.fixedMode };
-    const fr = frame(s.design, { w: 1180, h: s.design.chip.rows.length === 1 ? 420 : 700 });
-    boardSvg = renderBoard(st, { frame: fr, label: s.title });
-  } else boardSvg = realChecksSvg(s.panel.stage);
-  parts.push(`<main class="f-main"><div class="f-board">${boardSvg}${verdictBadge(s)}</div><aside class="f-panel">${panel(s)}</aside></main>`);
-  if (opts.captions !== false && s.caption) parts.push(`<div class="f-cap">${s.caption.map((l) => `<div>${esc(l)}</div>`).join("")}</div>`);
+  const no = String(s.cueIndex + 1).padStart(2, "0");
+  parts.push(`<header><span class="brand">Su3037 · Legalization Lesson 03</span><span class="chap">${s.panel.kind === "title" || s.panel.kind === "end" ? "" : `${no} · ${esc(s.title)}`}</span><span class="film">${esc(s.film)} · 合法吗？</span></header>`);
+  const k = s.panel.kind;
+  if (k === "title" || k === "end") parts.push(`<div class="card-wrap">${panel(s)}</div>`);
+  else if (k === "walk") parts.push(walkStage(s.walk) + `<aside class="panel walk">${panel(s)}</aside>`);
+  else {
+    let boardSvg = "";
+    if (s.gcd) boardSvg = gcdSvg(opts.gcd);
+    else if (s.board && s.board.placement) {
+      const st = { ...s.board, design: s.design, bad: s.report ? badMap(s.report) : s.board.bad, fixedMode: s.board.fixedMode };
+      const fr = frame(s.design, { w: 1180, h: s.design.chip.rows.length === 1 ? 420 : 700 });
+      boardSvg = renderBoard(st, { frame: fr, label: s.title });
+    } else boardSvg = realChecksSvg(s.panel.stage);
+    parts.push(`<div class="boards">${boardSvg}${verdictBadge(s)}</div><aside class="panel">${panel(s)}</aside>`);
+  }
+  if (opts.captions !== false && s.caption) parts.push(`<div class="caption"><div class="shade"></div><p class="main">${s.caption.map(esc).join("")}</p></div>`);
   return parts.join("");
+}
+
+function walkStage(w) {
+  if (!w || w.missing) return `<div class="walk-stage"><div class="walk-missing">（实验台截图尚未录制：运行 scripts/record-walk.mjs）</div></div>`;
+  const W = 1380;
+  const k = W / w.viewport.w;
+  const H = Math.round(w.viewport.h * k);
+  const [cx, cy] = w.cursor;
+  const ring = w.click == null ? "" : `<circle cx="${(cx * k).toFixed(1)}" cy="${(cy * k).toFixed(1)}" r="${(10 + 34 * w.click).toFixed(1)}" fill="none" stroke="#ddbd78" stroke-width="3" opacity="${(1 - w.click).toFixed(3)}"/>`;
+  return `<div class="walk-stage"><div class="walk-chrome"><i></i><i></i><i></i><span>${esc(w.url)}</span></div>
+  <div class="walk-shot" style="width:${W}px;height:${H}px"><img src="${w.shot}" width="${W}" height="${H}" alt="">
+  <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${ring}<g transform="translate(${(cx * k).toFixed(1)},${(cy * k).toFixed(1)})">${CURSOR}</g></svg></div></div>`;
 }
 
 const esc = (v) => String(v).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
@@ -31,12 +51,20 @@ function verdictBadge(s) {
   if (!s.report) return "";
   const r = s.report;
   const ok = r.verdict === "legal";
-  return `<div class="f-verdict ${ok ? "ok" : "bad"}">${ok ? "✓ 合法" : "✗ 不合法"}<small>${ok ? "五条规则全部成立" : r.violations.map((v) => `${v.code} ${v.cells.join("/")}`).slice(0, 3).join(" · ") + (r.violations.length > 3 ? " …" : "")}</small></div>`;
+  return `<div class="verdict ${ok ? "ok" : "bad"}">${ok ? "✓ 合法" : "✗ 不合法"}<small>${ok ? "五条规则全部成立" : r.violations.map((v) => `${v.code} ${v.cells.join("/")}`).slice(0, 3).join(" · ") + (r.violations.length > 3 ? " …" : "")}</small></div>`;
 }
 
 function panel(s) {
   const p = s.panel;
   switch (p.kind) {
+    case "title":
+      return `<div class="title-card"><p class="kicker">Legalization · Lesson 03</p><h1>${["合", "法", "吗", "？"].map((c, i) => `<span class="${i < p.pieces ? "" : "off"}">${c}</span>`).join("")}</h1>
+        <p class="sub ${p.pieces >= 4 ? "" : "off"}">布局合法性检查与指标</p><p class="tags ${p.pieces >= 4 ? "" : "off"}">${RULES.map((r) => r[1]).join(" · ")}</p></div>`;
+    case "end":
+      return `<div class="end-card"><p class="kicker">Legalization · Lesson 03 · 合法吗？</p><h1>去实验台，亲手把布局修合法</h1>
+        <p class="lab">实验台 · 十个挑战 · 八道自测 · Python 练习</p><p class="site">su3037.github.io/legalization-lesson03-legality-metrics</p>${p.credit ? `<p class="credit">${esc(p.credit)}</p>` : ""}</div>`;
+    case "walk":
+      return `<p class="walk-step num">第 ${p.i + 1} 步 · 共 ${p.n} 步</p><h2>${esc(p.title)}</h2><p class="sub">真实页面的截图，不是示意图。</p>`;
     case "question":
       return `<div class="big-q">${p.text}</div><p class="muted">${p.sub}</p><p class="muted">芯片 12 × 6 · 3 行 · 6 个单元</p>`;
     case "terms":
@@ -101,16 +129,16 @@ function panel(s) {
 
 function realChecksSvg(stage) {
   // Two rows with orientations N / FS and a cell in the wrong orientation; a fence box.
-  return `<svg viewBox="0 0 1180 700" class="board" role="img" aria-label="真实检查项示意">
-  <rect x="80" y="160" width="1020" height="140" fill="#141b28"/><rect x="80" y="300" width="1020" height="140" fill="#18202f"/>
-  <text x="70" y="235" fill="#9fb0cc" font-size="22" text-anchor="end">N</text><text x="70" y="375" fill="#9fb0cc" font-size="22" text-anchor="end">FS</text>
-  <line x1="80" y1="160" x2="1100" y2="160" stroke="#e66" stroke-width="4"/><text x="1110" y="166" fill="#e66" font-size="18">VDD</text>
-  <line x1="80" y1="300" x2="1100" y2="300" stroke="#59f" stroke-width="4"/><text x="1110" y="306" fill="#59f" font-size="18">VSS</text>
-  <line x1="80" y1="440" x2="1100" y2="440" stroke="#e66" stroke-width="4"/>
-  ${stage >= 2 ? `<rect x="200" y="170" width="150" height="120" rx="6" fill="#5b9dff"/><text x="275" y="240" font-size="24" text-anchor="middle">N ✓</text>
-  <rect x="420" y="310" width="150" height="120" rx="6" fill="#f2a93b" stroke="#ff5d5d" stroke-width="4" stroke-dasharray="8 5"/><text x="495" y="380" font-size="24" text-anchor="middle">N ✗</text>
-  <text x="495" y="470" fill="#ff8a8a" font-size="20" text-anchor="middle">FS 行里放了 N 朝向</text>` : ""}
-  ${stage >= 3 ? `<rect x="700" y="170" width="330" height="260" fill="rgba(167,139,250,.12)" stroke="#a78bfa" stroke-width="3" stroke-dasharray="10 6"/><text x="865" y="520" fill="#c4b5fd" font-size="20" text-anchor="middle">限定区域 / 禁止放置区</text>` : ""}
+  return `<svg viewBox="0 0 1180 700" class="board" role="img" font-family="Noto Sans SC, sans-serif" aria-label="真实检查项示意">
+  <rect x="80" y="160" width="1020" height="140" fill="#081a22"/><rect x="80" y="300" width="1020" height="140" fill="#0b2029"/>
+  <text x="70" y="235" fill="#8fa3a3" font-size="22" text-anchor="end">N</text><text x="70" y="375" fill="#8fa3a3" font-size="22" text-anchor="end">FS</text>
+  <line x1="80" y1="160" x2="1100" y2="160" stroke="#d99a9a" stroke-width="4"/><text x="1110" y="166" fill="#d99a9a" font-size="18">VDD</text>
+  <line x1="80" y1="300" x2="1100" y2="300" stroke="#86a9e0" stroke-width="4"/><text x="1110" y="306" fill="#86a9e0" font-size="18">VSS</text>
+  <line x1="80" y1="440" x2="1100" y2="440" stroke="#d99a9a" stroke-width="4"/>
+  ${stage >= 2 ? `<rect x="200" y="170" width="150" height="120" rx="6" fill="#86a9e0"/><text x="275" y="240" font-size="24" text-anchor="middle">N ✓</text>
+  <rect x="420" y="310" width="150" height="120" rx="6" fill="#d58f62" stroke="#e0827a" stroke-width="4" stroke-dasharray="8 5"/><text x="495" y="380" font-size="24" text-anchor="middle">N ✗</text>
+  <text x="495" y="470" fill="#e8a39b" font-size="20" text-anchor="middle">FS 行里放了 N 朝向</text>` : ""}
+  ${stage >= 3 ? `<rect x="700" y="170" width="330" height="260" fill="rgba(161,139,192,.12)" stroke="#a18bc0" stroke-width="3" stroke-dasharray="10 6"/><text x="865" y="520" fill="#c9b8e0" font-size="20" text-anchor="middle">限定区域 / 禁止放置区</text>` : ""}
   </svg>`;
 }
 
@@ -121,12 +149,12 @@ function gcdSvg(g) {
   const sx = (W - 80) / g.sites;
   const sy = (H - 120) / g.rows;
   const cells = g.dp
-    .map(([x, y, w, o, fx]) => `<rect x="${(40 + x * sx).toFixed(1)}" y="${(H - 60 - (y + 1) * sy).toFixed(1)}" width="${Math.max(1, w * sx - 0.6).toFixed(1)}" height="${(sy - 1).toFixed(1)}" fill="${fx ? "#6b7280" : o === "N" || o === "FN" ? "#5b9dff" : "#3cc48f"}"/>`)
+    .map(([x, y, w, o, fx]) => `<rect x="${(40 + x * sx).toFixed(1)}" y="${(H - 60 - (y + 1) * sy).toFixed(1)}" width="${Math.max(1, w * sx - 0.6).toFixed(1)}" height="${(sy - 1).toFixed(1)}" fill="${fx ? "#3d5d64" : o === "N" || o === "FN" ? "#86a9e0" : "#a3b26f"}"/>`)
     .join("");
-  return `<svg viewBox="0 0 ${W} ${H}" class="board" role="img" aria-label="gcd 详细布局之后的真实布局">
-  <rect x="40" y="60" width="${W - 80}" height="${H - 120}" fill="#141b28" stroke="#8aa0c2"/>${cells}
-  <text x="40" y="40" fill="#e6edf7" font-size="22">gcd · Nangate45 · 详细布局之后 · 57 行 × 422 站点</text>
-  <text x="40" y="${H - 20}" fill="#9fb0cc" font-size="18">蓝：N/FN 朝向　绿：FS/S 朝向　灰：固定的 tap 单元</text></svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="board" role="img" font-family="Noto Sans SC, sans-serif" aria-label="gcd 详细布局之后的真实布局">
+  <rect x="40" y="60" width="${W - 80}" height="${H - 120}" fill="#081a22" stroke="#3d5d64"/>${cells}
+  <text x="40" y="40" fill="#eeeadd" font-size="22">gcd · Nangate45 · 详细布局之后 · 57 行 × 422 站点</text>
+  <text x="40" y="${H - 20}" fill="#8fa3a3" font-size="18">蓝：N/FN 朝向　绿：FS/S 朝向　暗：固定的 tap 单元</text></svg>`;
 }
 
 export { cellColor };

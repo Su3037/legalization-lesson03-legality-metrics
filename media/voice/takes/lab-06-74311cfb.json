@@ -1,0 +1,31 @@
+{
+ "key": "lab-06-74311cfb",
+ "text": "再看固定约束。D 被挪走了，所以不合法；关掉固定约束，同一张布局，结论就翻了过来。",
+ "engine": "kokoro-multi-lang-v1_1",
+ "speaker": 20,
+ "speed": 1.0,
+ "lexicon": "patched (media/voice/overrides.tsv)",
+ "duration": 10.479,
+ "gaps": [
+  [
+   1.74,
+   1.92
+  ],
+  [
+   3.28,
+   3.44
+  ],
+  [
+   4.96,
+   5.14
+  ],
+  [
+   6.8,
+   6.98
+  ],
+  [
+   8.46,
+   8.64
+  ]
+ ]
+}

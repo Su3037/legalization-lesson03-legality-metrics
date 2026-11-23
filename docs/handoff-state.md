@@ -14,9 +14,9 @@
 4. Native-speaker confirmation of `media/lexicon.zh.tsv` (all 40 rows are marked pending).
 5. Decide whether and when to post `docs/submission-draft.md` to issue #35 (not posted).
 
-**If a voice passes later:** synthesise by paragraph with the lexicon overrides
-(`media/voice/overrides.tsv`), force-align, re-time the clock from alignment (`src/film/cues.mjs`),
-mix to −16 LUFS / −1 dBTP, re-render with `scripts/render-film.mjs`, and add the audio track.
+**If a better voice passes later:** put its paragraph takes in `media/voice/takes/` (same keys as
+`build/voice-jobs.json`), run `node scripts/build-films.mjs` (clocks follow the measured takes), re-mix with
+`scripts/mix_audio.py` and re-render with `scripts/render-film.mjs` (see `docs/REPRODUCIBILITY.md`).
 
 **Environment notes:** OpenROAD from micromamba (`litex-hub`), OpenROAD source sparse clone at
 `01bba3695`, sherpa-onnx models in `/opt/models` (not committed). Hugging Face, modelscope, hosted TTS
