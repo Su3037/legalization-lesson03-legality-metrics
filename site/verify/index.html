@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>验证与来源 · 合法吗？</title>
+<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
+<body><!--NAV-->
+<main id="main" class="page">
+<h1>验证与来源</h1>
+<p class="lead">这一页说明：检查器怎样被独立地验证，哪些门槛通过了、哪些没有通过或还没有做，以及所有素材的来源和许可。下面的表格直接读取仓库里的结果文件，不是手抄的数字。</p>
+
+<h2 id="gates">验收门槛</h2>
+<div class="tablewrap"><table class="gate"><thead><tr><th>门槛</th><th>标准</th><th>状态</th><th>证据</th></tr></thead><tbody id="gate-body">
+<tr><td>检查器单元测试</td><td>JS 与 Python 全部通过</td><td class="pass">通过</td><td>19 个 JS 测试、14 个 Python 测试（含性质测试）</td></tr>
+<tr><td>JS ↔ Python 差分测试</td><td>3,000 个随机用例 0 差异</td><td class="pass">通过</td><td><code>tests/diff/fuzz.mjs</code>，种子 20261123</td></tr>
+<tr><td>变异测试</td><td>≥ 12 个变异体，变异得分 100%</td><td class="pass">通过</td><td id="g-mut">18 / 18</td></tr>
+<tr><td>CP-SAT 精确最优</td><td>修复结果与最优对比，不合法的修复被标出</td><td class="pass">通过</td><td>见下文“精确最优”</td></tr>
+<tr><td>OpenROAD <code>check_placement</code></td><td>在双方都检查的规则上一致</td><td class="pass">通过</td><td>变异体与 gcd 三处注入错误全部一致</td></tr>
+<tr><td>真实设计演示</td><td>gcd 全局/详细布局结论与 OpenROAD 一致</td><td class="pass">通过</td><td>见下文“gcd”</td></tr>
+<tr><td>影片确定性</td><td><code>renderAt(t)</code> 跳转与新页面结果相同</td><td class="pass">通过</td><td><code>scripts/film-stills.mjs</code></td></tr>
+<tr><td>字幕</td><td>每行 ≤ 16 字，≤ 2 行，≤ 9 字/秒</td><td class="pass">通过</td><td>76 条，最长 16 字</td></tr>
+<tr><td>配音客观筛查</td><td>两个独立识别器字错率 ≤ 3%，术语全对，语速 3.8–4.8 字/秒等</td><td class="fail">未通过</td><td>最好的 Kokoro 为 4.3–5.0%（见下文）</td></tr>
+<tr><td>配音盲听测试</td><td>≥ 8 位母语听众，自然度 ≥ 4.0，判为机器 &lt; 30%</td><td class="notrun">未进行</td><td>需要真人听众；测试页已就绪：<a href="{{BASE}}listen/">盲听测试</a></td></tr>
+<tr><td>响度</td><td>−16 LUFS / −1 dBTP</td><td class="notrun">不适用</td><td>本版影片无声；试听片段已对齐到 −16 LUFS</td></tr>
+<tr><td>学习效果研究</td><td>前后测、挑战记录</td><td class="notrun">未进行</td><td>方案与表单已就绪：<a href="{{BASE}}study/">参与者页面</a></td></tr>
+<tr><td>网站端到端与无障碍</td><td>所有页面无错误；axe-core 无严重问题</td><td id="g-e2e" class="notrun">见仓库</td><td><code>tests/e2e/site.mjs</code>，结果在 <code>docs/acceptance.md</code></td></tr>
+</tbody></table></div>
+
+<h2 id="oracles">三个独立参照</h2>
+<h3>1. 变异测试与 OpenROAD</h3>
+<p>每个变异体是一张故意改坏的布局（或输入）。JS 和 Python 检查器都必须报出预期的违规；能在 DEF 里表达的变异体，也交给 OpenROAD <code>check_placement</code> 判定。</p>
+<div class="tablewrap"><table><thead><tr><th>编号</th><th>改动</th><th>期望</th><th>JS</th><th>Python</th><th>OpenROAD</th><th>说明</th></tr></thead><tbody id="mut"></tbody></table></div>
+<h3 id="optimum">2. 精确最优（OR-Tools CP-SAT）</h3>
+<div class="tablewrap"><table><thead><tr><th>实例</th><th>D 固定</th><th>最少总位移</th><th>此时最大位移</th><th>最小最大位移</th><th>此时总位移</th><th>达到最少的摆法数</th></tr></thead><tbody id="opt"></tbody></table></div>
+<h3>3. 性质测试与差分测试</h3>
+<p>fast-check（JS）和 Hypothesis（Python）在随机布局上检查不变量：结论与单元的排列顺序无关；把芯片左右镜像，结论也跟着镜像；整体平移整数个站点（所有单元仍在芯片内时）结论和 HPWL 不变；参考布局对自身的位移为 0，位移满足三角不等式；多加一个线网 HPWL 不会变小；修复算法只要成功，输出就合法。另外，3,000 个随机布局上 JS 和 Python 两个实现的结论、违规和指标完全一致。</p>
+
+<h2 id="gcd">真实小设计：gcd（Nangate45）</h2>
+<div id="gcd-box" class="card"><p class="hint">载入中…</p></div>
+
+<h2 id="voice">配音：为什么这一版没有声音</h2>
+<p>以前几门课用逐句合成的配音，听起来不自然。这次按“整段合成 → 客观筛查 → 母语听众盲听”的流程选声音，门槛事先定好，不会事后放宽。在本环境能用的开源中文声音里，没有一个通过客观筛查（要求两个独立的语音识别器字错率都 ≤ 3%；我们用了三个，最好的声音在三个上都是 4.3–5.0%）。提示词里推荐的较新模型（CosyVoice3、Qwen3-TTS、VoxCPM2 等）需要从 Hugging Face 下载，本环境无法访问，也没有付费语音服务的密钥。因此按约定发布带字幕的无声版。如果以后有声音通过盲听测试，再替换音轨。</p>
+<div class="tablewrap"><table><thead><tr><th>声音</th><th>修正词典</th><th>字错率（Paraformer / SenseVoice / Whisper）</th><th>声调拼音错误率</th><th>有声语速（字/秒）</th></tr></thead><tbody id="voice-t"></tbody></table></div>
+<p class="hint">剩下的错误多数是识别器把同音词听错（如“只是”听成“指示”）。我们修正了所有开源词典里把“一行”读成 yì xíng 的错误。合成声音一律会标明是合成的；不会克隆任何人的声音，除非本人书面同意。</p>
+
+<h2 id="credits">来源与许可</h2>
+<ul>
+<li>代码：MIT 许可。课程文字、图、影片、课件：CC BY 4.0。</li>
+<li>改编自 Yongfu Li，<a href="https://github.com/yongfu-li/eda-learning">eda-learning</a>（CC BY 4.0），Module 01-03 的示例布局、术语和 Abacus-lite 思路。</li>
+<li>gcd 设计与 Nangate45 库来自 <a href="https://github.com/The-OpenROAD-Project/OpenROAD">OpenROAD</a> 的测试目录（BSD-3-Clause）；OpenROAD 2.0-12381-g01bba3695 用于对照。</li>
+<li>OR-Tools CP-SAT（Apache-2.0）用于精确最优。fast-check（MIT）、Hypothesis（MPL-2.0）、axe-core（MPL-2.0）、Playwright（Apache-2.0）用于测试。</li>
+<li>筛查用的语音模型：Kokoro（Apache-2.0）、MeloTTS（MIT）、Matcha（Databaker 数据，仅限非商业，所以只做了筛查，不会采用），通过 sherpa-onnx（Apache-2.0）运行；识别器 Paraformer、SenseVoice、Whisper。</li>
+<li>字体：系统字体（Noto Sans CJK，SIL OFL 1.1）。</li>
+</ul>
+</main>
+<!--FOOT-->
+<script type="module">
+const B = "{{BASE}}";
+const J = (u) => fetch(B + u).then((r) => (r.ok ? r.json() : null));
+const esc = (x) => String(x ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+const [mut, opt, gcd, voice] = await Promise.all([J("data/mutants-report.json"), J("data/cpsat-results.json"), J("data/real-design.json"), J("data/screen-results.json")]);
+const yn = (b) => (b ? '<span class="ok">✓</span>' : '<span class="bad">✗</span>');
+if (mut) {
+  document.getElementById("g-mut").textContent = `${mut.caught_by_js_and_python} / ${mut.mutants}，得分 ${(mut.mutation_score * 100).toFixed(0)}%`;
+  document.getElementById("mut").innerHTML = mut.rows.map((r) => `<tr><td>${r.id}</td><td>${esc(r.zh)}</td><td>${esc(r.expect.verdict)} ${esc((r.expect.codes || []).join(", "))}</td><td>${yn(r.js_ok)}</td><td>${yn(r.py_ok)}</td><td>${r.openroad_agrees === null || r.openroad_agrees === undefined ? "—" : yn(r.openroad_agrees) + " " + esc(r.openroad_status || "")}</td><td class="hint">${esc(r.scope_note)}</td></tr>`).join("");
+}
+if (opt) document.getElementById("opt").innerHTML = opt.instances.map((i) => `<tr><td>${esc(i.name)}</td><td>${i.fixed_D ? "是" : "否"}</td><td>${i.min_total}</td><td>${i.max_at_min_total}</td><td>${i.min_max}</td><td>${i.total_at_min_max}</td><td>${i.n_optimal_placements ?? "—"}</td></tr>`).join("");
+if (gcd) {
+  const o = gcd.ours, r = gcd.openroad, d = gcd.displacement_gp_to_dp;
+  document.getElementById("gcd-box").innerHTML = `<p>${esc(gcd.design)}：${gcd.instances} 个单元，${gcd.rows} 行，站点宽 ${gcd.site_dbu} DBU，${gcd.dbu_per_um} DBU/µm。</p>
+<div class="tablewrap"><table><thead><tr><th>布局</th><th>本课检查器</th><th>OpenROAD</th><th>HPWL（中心引脚 / 真实引脚，µm）</th></tr></thead><tbody>
+<tr><td>全局布局</td><td>${o.global_place.verdict}：ROW ${o.global_place.counts.ROW}、SITE ${o.global_place.counts.SITE}</td><td>${r["gcd_global_place.def"].status}：${Object.entries(r["gcd_global_place.def"].failures).map(([k, v]) => `${k} ${v}`).join("，")}</td><td>${o.global_place.hpwl_um_centre_pins} / ${o.global_place.hpwl_um_true_pins}</td></tr>
+<tr><td>详细布局</td><td>${o.detailed_place.verdict}</td><td>${r["gcd_detailed_place.def"].status}</td><td>${o.detailed_place.hpwl_um_centre_pins} / ${o.detailed_place.hpwl_um_true_pins}</td></tr>
+<tr><td>注入三处错误</td><td>${gcd.three_faults.violations.map(([c, cells]) => `${c} ${cells.join("/")}`).join("，")}</td><td>${r["gcd_three_faults.def"].status}：${Object.entries(r["gcd_three_faults.def"].failures).map(([k, v]) => `${k} ${v.join("/")}`).join("，")}</td><td>—</td></tr>
+</tbody></table></div>
+<p>全局 → 详细布局位移：${d.cells} 个单元，总和 ${d.total_um} µm，平均 ${d.average_um} µm，最大 ${d.max_um} µm。站点对齐集合与 OpenROAD 完全一致；重叠方面 OpenROAD 报 ${gcd.openroad_global_place_set_agreement.openroad_overlap} 个单元，我们报 ${gcd.openroad_global_place_set_agreement.ours_overlap_or_rect} 个（含不在行上的矩形相交诊断），OpenROAD 的集合是我们的子集，多出来的都是它只报一方的配对单元。</p>`;
+}
+if (voice) document.getElementById("voice-t").innerHTML = voice.map((v) => `<tr><td>${esc(v.engine)}${v.sid !== undefined ? " #" + v.sid : ""}</td><td>${v.patched_lexicon ? "是" : "否"}</td><td>${["paraformer", "sensevoice", "whisper"].map((k) => (v.cer && v.cer[k] !== undefined ? (v.cer[k] * 100).toFixed(1) + "%" : "—")).join(" / ")}</td><td>${v.toned_pinyin_error_rate ? Object.values(v.toned_pinyin_error_rate).map((x) => (x * 100).toFixed(1) + "%").join(" / ") : "—"}</td><td>${v.chars_per_second_voiced ?? "—"}</td></tr>`).join("");
+</script>
+</body></html>

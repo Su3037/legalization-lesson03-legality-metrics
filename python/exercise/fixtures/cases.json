@@ -1,0 +1,3145 @@
+{
+ "note": "Expected values from python/legality_metrics. 'NaN' strings are read back as float('nan').",
+ "cases": [
+  {
+   "name": "seed: three cells stacked",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "OVERLAP",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "OVERLAP",
+      [
+       "A",
+       "C"
+      ]
+     ],
+     [
+      "OVERLAP",
+      [
+       "B",
+       "C"
+      ]
+     ]
+    ],
+    "hpwl": 32.0,
+    "displacement": {
+     "total": 0.0,
+     "average": 0.0,
+     "max": 0.0
+    }
+   }
+  },
+  {
+   "name": "legal golden placement",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 50.0,
+    "displacement": {
+     "total": 14.0,
+     "average": 2.333333333,
+     "max": 6.0
+    }
+   }
+  },
+  {
+   "name": "touching cells are legal",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 50.0,
+    "displacement": {
+     "total": 0.0,
+     "average": 0.0,
+     "max": 0.0
+    }
+   }
+  },
+  {
+   "name": "B one site left overlaps A",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 1,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "OVERLAP",
+      [
+       "A",
+       "B"
+      ]
+     ]
+    ],
+    "hpwl": 50.0,
+    "displacement": {
+     "total": 1.0,
+     "average": 0.166666667,
+     "max": 1.0
+    }
+   }
+  },
+  {
+   "name": "C off-row (y = 3)",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 3
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "ROW",
+      [
+       "C"
+      ]
+     ]
+    ],
+    "hpwl": 50.0,
+    "displacement": {
+     "total": 1.0,
+     "average": 0.166666667,
+     "max": 1.0
+    }
+   }
+  },
+  {
+   "name": "F half a site off (x = 10.5)",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10.5,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "SITE",
+      [
+       "F"
+      ]
+     ]
+    ],
+    "hpwl": 50.5,
+    "displacement": {
+     "total": 0.5,
+     "average": 0.083333333,
+     "max": 0.5
+    }
+   }
+  },
+  {
+   "name": "D anchor inside, cell outside (fixed off)",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 11,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": false,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "BOUNDS",
+      [
+       "D"
+      ]
+     ]
+    ],
+    "hpwl": 59.0,
+    "displacement": {
+     "total": 3.0,
+     "average": 0.5,
+     "max": 3.0
+    }
+   }
+  },
+  {
+   "name": "B outside on the left",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": -1,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "BOUNDS",
+      [
+       "B"
+      ]
+     ],
+     [
+      "OVERLAP",
+      [
+       "A",
+       "B"
+      ]
+     ]
+    ],
+    "hpwl": 53.0,
+    "displacement": {
+     "total": 3.0,
+     "average": 0.5,
+     "max": 3.0
+    }
+   }
+  },
+  {
+   "name": "fixed D moved to empty space",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 6,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "FIXED",
+      [
+       "D"
+      ]
+     ]
+    ],
+    "hpwl": 44.0,
+    "displacement": {
+     "total": 2.0,
+     "average": 0.333333333,
+     "max": 2.0
+    }
+   }
+  },
+  {
+   "name": "same placement, fixed constraint off",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 6,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": false,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 44.0,
+    "displacement": {
+     "total": 2.0,
+     "average": 0.333333333,
+     "max": 2.0
+    }
+   }
+  },
+  {
+   "name": "greedy snap still overlaps",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 5,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 3.7,
+     "y": 1.2
+    },
+    "B": {
+     "x": 4.1,
+     "y": 1.4
+    },
+    "C": {
+     "x": 5.2,
+     "y": 2.3
+    },
+    "D": {
+     "x": 8.4,
+     "y": 3.8
+    },
+    "E": {
+     "x": 0.3,
+     "y": 4.6
+    },
+    "F": {
+     "x": 10.2,
+     "y": 0.4
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "OVERLAP",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "OVERLAP",
+      [
+       "A",
+       "C"
+      ]
+     ],
+     [
+      "OVERLAP",
+      [
+       "B",
+       "C"
+      ]
+     ]
+    ],
+    "hpwl": 32.0,
+    "displacement": {
+     "total": 4.4,
+     "average": 0.733333333,
+     "max": 1.1
+    }
+   }
+  },
+  {
+   "name": "overlap removal repair",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 6,
+     "y": 2
+    },
+    "C": {
+     "x": 8,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 32.0,
+    "displacement": {
+     "total": 6.0,
+     "average": 1.0,
+     "max": 4.0
+    }
+   }
+  },
+  {
+   "name": "abacus-lite repair",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 0
+    },
+    "C": {
+     "x": 4,
+     "y": 4
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 38.0,
+    "displacement": {
+     "total": 4.0,
+     "average": 0.666666667,
+     "max": 2.0
+    }
+   }
+  },
+  {
+   "name": "raw global-placement floats",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 3.7,
+     "y": 1.2
+    },
+    "B": {
+     "x": 4.1,
+     "y": 1.4
+    },
+    "C": {
+     "x": 5.2,
+     "y": 2.3
+    },
+    "D": {
+     "x": 8.4,
+     "y": 3.8
+    },
+    "E": {
+     "x": 0.3,
+     "y": 4.6
+    },
+    "F": {
+     "x": 10.2,
+     "y": 0.4
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "BOUNDS",
+      [
+       "E"
+      ]
+     ],
+     [
+      "FIXED",
+      [
+       "D"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "A"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "B"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "C"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "D"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "E"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "F"
+      ]
+     ],
+     [
+      "SITE",
+      [
+       "A"
+      ]
+     ],
+     [
+      "SITE",
+      [
+       "B"
+      ]
+     ],
+     [
+      "SITE",
+      [
+       "C"
+      ]
+     ],
+     [
+      "SITE",
+      [
+       "D"
+      ]
+     ],
+     [
+      "SITE",
+      [
+       "E"
+      ]
+     ],
+     [
+      "SITE",
+      [
+       "F"
+      ]
+     ]
+    ],
+    "hpwl": 36.0,
+    "displacement": {
+     "total": 5.4,
+     "average": 0.9,
+     "max": 1.5
+    }
+   }
+  },
+  {
+   "name": "off-row cells never overlap-count",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2.5
+    },
+    "B": {
+     "x": 4,
+     "y": 2.5
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "ROW",
+      [
+       "A"
+      ]
+     ],
+     [
+      "ROW",
+      [
+       "B"
+      ]
+     ]
+    ],
+    "hpwl": 32.0,
+    "displacement": {
+     "total": 1.0,
+     "average": 0.166666667,
+     "max": 0.5
+    }
+   }
+  },
+  {
+   "name": "missing cell",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "invalid",
+    "error_codes": [
+     "V_MISSING"
+    ]
+   }
+  },
+  {
+   "name": "unknown cell",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    },
+    "Z": {
+     "x": 0,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "invalid",
+    "error_codes": [
+     "V_UNKNOWN"
+    ]
+   }
+  },
+  {
+   "name": "NaN coordinate",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": "NaN",
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "invalid",
+    "error_codes": [
+     "V_NONFINITE"
+    ]
+   }
+  },
+  {
+   "name": "empty placement",
+   "design": {
+    "chip": {
+     "W": 12,
+     "H": 6,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0,
+      2,
+      4
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 2
+     },
+     {
+      "id": "B",
+      "width": 2
+     },
+     {
+      "id": "C",
+      "width": 2
+     },
+     {
+      "id": "D",
+      "width": 2
+     },
+     {
+      "id": "E",
+      "width": 1
+     },
+     {
+      "id": "F",
+      "width": 1
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "A",
+      "C"
+     ],
+     [
+      "B",
+      "D"
+     ],
+     [
+      "A",
+      "B",
+      "C",
+      "D"
+     ],
+     [
+      "E",
+      "F"
+     ]
+    ],
+    "fixed_macros": [
+     {
+      "id": "D",
+      "x": 8,
+      "y": 4,
+      "width": 2,
+      "fixed": true
+     }
+    ]
+   },
+   "placement": {},
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "invalid",
+    "error_codes": [
+     "V_EMPTY"
+    ]
+   }
+  },
+  {
+   "name": "tradeoff: jump",
+   "design": {
+    "chip": {
+     "W": 10,
+     "H": 2,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 1
+     },
+     {
+      "id": "B",
+      "width": 1
+     },
+     {
+      "id": "C",
+      "width": 1
+     },
+     {
+      "id": "D",
+      "width": 1
+     },
+     {
+      "id": "X",
+      "width": 2
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "X",
+      "A"
+     ]
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 1,
+     "y": 0
+    },
+    "C": {
+     "x": 2,
+     "y": 0
+    },
+    "D": {
+     "x": 3,
+     "y": 0
+    },
+    "X": {
+     "x": 4,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 1,
+     "y": 0
+    },
+    "C": {
+     "x": 2,
+     "y": 0
+    },
+    "D": {
+     "x": 3,
+     "y": 0
+    },
+    "X": {
+     "x": 0,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 6.5,
+    "displacement": {
+     "total": 4.0,
+     "average": 0.8,
+     "max": 4.0
+    }
+   }
+  },
+  {
+   "name": "tradeoff: shift",
+   "design": {
+    "chip": {
+     "W": 10,
+     "H": 2,
+     "siteW": 1,
+     "rowH": 2,
+     "rows": [
+      0
+     ]
+    },
+    "cells": [
+     {
+      "id": "A",
+      "width": 1
+     },
+     {
+      "id": "B",
+      "width": 1
+     },
+     {
+      "id": "C",
+      "width": 1
+     },
+     {
+      "id": "D",
+      "width": 1
+     },
+     {
+      "id": "X",
+      "width": 2
+     }
+    ],
+    "nets": [
+     [
+      "A",
+      "B"
+     ],
+     [
+      "C",
+      "D"
+     ],
+     [
+      "X",
+      "A"
+     ]
+    ]
+   },
+   "placement": {
+    "A": {
+     "x": 2,
+     "y": 0
+    },
+    "B": {
+     "x": 3,
+     "y": 0
+    },
+    "C": {
+     "x": 4,
+     "y": 0
+    },
+    "D": {
+     "x": 5,
+     "y": 0
+    },
+    "X": {
+     "x": 0,
+     "y": 0
+    }
+   },
+   "fixed_mode": true,
+   "reference": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 1,
+     "y": 0
+    },
+    "C": {
+     "x": 2,
+     "y": 0
+    },
+    "D": {
+     "x": 3,
+     "y": 0
+    },
+    "X": {
+     "x": 0,
+     "y": 0
+    }
+   },
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 3.5,
+    "displacement": {
+     "total": 8.0,
+     "average": 1.6,
+     "max": 2.0
+    }
+   }
+  },
+  {
+   "name": "0.19 site pitch, legal",
+   "design": {
+    "chip": {
+     "W": 3.8,
+     "H": 2.8,
+     "siteW": 0.19,
+     "rowH": 1.4,
+     "rows": [
+      0,
+      1.4
+     ]
+    },
+    "cells": [
+     {
+      "id": "P",
+      "width": 0.38
+     },
+     {
+      "id": "Q",
+      "width": 0.57
+     },
+     {
+      "id": "R",
+      "width": 0.19
+     }
+    ],
+    "nets": [
+     [
+      "P",
+      "Q",
+      "R"
+     ]
+    ],
+    "fixed_macros": []
+   },
+   "placement": {
+    "P": {
+     "x": 0,
+     "y": 0
+    },
+    "Q": {
+     "x": 0.38,
+     "y": 0
+    },
+    "R": {
+     "x": 0.57,
+     "y": 1.4
+    }
+   },
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 1.875
+   }
+  },
+  {
+   "name": "0.19 site pitch, Q off-site",
+   "design": {
+    "chip": {
+     "W": 3.8,
+     "H": 2.8,
+     "siteW": 0.19,
+     "rowH": 1.4,
+     "rows": [
+      0,
+      1.4
+     ]
+    },
+    "cells": [
+     {
+      "id": "P",
+      "width": 0.38
+     },
+     {
+      "id": "Q",
+      "width": 0.57
+     },
+     {
+      "id": "R",
+      "width": 0.19
+     }
+    ],
+    "nets": [
+     [
+      "P",
+      "Q",
+      "R"
+     ]
+    ],
+    "fixed_macros": []
+   },
+   "placement": {
+    "P": {
+     "x": 0,
+     "y": 0
+    },
+    "Q": {
+     "x": 0.4,
+     "y": 0
+    },
+    "R": {
+     "x": 0.57,
+     "y": 1.4
+    }
+   },
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "illegal",
+    "violations": [
+     [
+      "SITE",
+      [
+       "Q"
+      ]
+     ]
+    ],
+    "hpwl": 1.895
+   }
+  },
+  {
+   "name": "0.19 site pitch, touching at 0.95",
+   "design": {
+    "chip": {
+     "W": 3.8,
+     "H": 2.8,
+     "siteW": 0.19,
+     "rowH": 1.4,
+     "rows": [
+      0,
+      1.4
+     ]
+    },
+    "cells": [
+     {
+      "id": "P",
+      "width": 0.38
+     },
+     {
+      "id": "Q",
+      "width": 0.57
+     },
+     {
+      "id": "R",
+      "width": 0.19
+     }
+    ],
+    "nets": [
+     [
+      "P",
+      "Q",
+      "R"
+     ]
+    ],
+    "fixed_macros": []
+   },
+   "placement": {
+    "P": {
+     "x": 0.57,
+     "y": 0
+    },
+    "Q": {
+     "x": 0.95,
+     "y": 0
+    },
+    "R": {
+     "x": 3.61,
+     "y": 1.4
+    }
+   },
+   "fixed_mode": true,
+   "reference": null,
+   "expected": {
+    "verdict": "legal",
+    "violations": [],
+    "hpwl": 4.345
+   }
+  }
+ ]
+}

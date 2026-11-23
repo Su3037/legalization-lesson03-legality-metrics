@@ -1,0 +1,6 @@
+# Clips served (under opaque names) on the blind listening page. One path per line.
+# matcha-baker is excluded (Databaker data is non-commercial); kokoro-f20-stocklex is a lexicon A/B, not a casting candidate.
+media/voice/clips/kokoro-f20.m4a
+media/voice/clips/kokoro-m70.m4a
+media/voice/clips/melo.m4a
+media/voice/human/ref.m4a

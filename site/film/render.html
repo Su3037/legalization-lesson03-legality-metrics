@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Film renderer</title>
+<link rel="stylesheet" href="../assets/film.css"></head>
+<body><div id="stage"></div>
+<script type="module">
+import { buildWorld, stateAt, snapshot } from "../src/film/timeline.js";
+import { renderFrame } from "../src/film/scene.js";
+const q = new URLSearchParams(location.search);
+const captions = q.get("captions") !== "0";
+const J = (u) => fetch(u).then((r) => r.json());
+const [raw, cases, trade, cpsat, gcd, clock] = await Promise.all([
+  J("../data/fixtures/tiny_legal.json"), J("../data/fixtures/cases.json"), J("../data/fixtures/tradeoff.json"),
+  J("../data/cpsat-results.json"), J("../data/gcd-placement.json"), J(q.get("clock") || "../media/film/clock.zh.json")]);
+const W = buildWorld({ raw, cases: cases.cases, trade, cpsat, gcd });
+const stage = document.getElementById("stage");
+window.clock = { duration: clock.duration, fps: clock.fps, cues: clock.cues.map((c) => ({ id: c.id, start: c.start, end: c.end, title: c.title })) };
+window.renderAt = (t) => {
+  const s = stateAt(W, clock, t);
+  stage.innerHTML = renderFrame(s, { captions, gcd });
+  return snapshot(s);
+};
+window.stateAt = (t) => stateAt(W, clock, t);
+await document.fonts.ready;
+window.renderAt(Number(q.get("t") || 0));
+window.ready = true;
+</script></body></html>

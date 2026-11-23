@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python 练习 · 合法吗？</title>
+<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
+<body><!--NAV-->
+<main id="main" class="page">
+<h1>Python 练习：自己写一个检查器</h1>
+<p class="lead">下载压缩包，补完 <code>starter.py</code> 里 7 个标了 TODO 的函数，运行 <code>python check.py</code> 自测。只需要 Python 3.8+，不用装任何包。</p>
+<p><a class="tag" href="{{BASE}}downloads/module03-python-exercise.zip" download>下载 module03-python-exercise.zip</a></p>
+<h2>自测结果的三种状态</h2>
+<div class="tablewrap"><table><thead><tr><th>状态</th><th>意思</th></tr></thead><tbody>
+<tr><td class="pass">PASS</td><td>24 个用例全对。</td></tr>
+<tr><td class="notrun">INCOMPLETE</td><td>还没有算错的，但还有函数没写（会列出函数名）。</td></tr>
+<tr><td class="fail">FAIL</td><td>至少一个用例算错，脚本会打印期望值和你的结果。</td></tr>
+</tbody></table></div>
+<h2>要写的函数</h2>
+<ol>
+<li><code>validate</code>：空布局、缺单元、多了未声明的单元、坐标不是有限的数 → 输入无效。</li>
+<li><code>on_row</code>、<code>on_site</code>、<code>inside</code>：规则一到三，坐标换成整数 DBU 再比较。</li>
+<li><code>intervals_overlap</code>：左闭右开，相接不算重叠。</li>
+<li><code>displacement</code>：相对不变的参考布局，总和、平均值、最大值。</li>
+<li><code>hpwl</code>：单元中心的包围盒，宽 + 高，求和。</li>
+</ol>
+<pre><code>$ python check.py
+  ok    seed: three cells stacked
+  ok    legal golden placement
+  FAIL  touching cells are legal: verdict 'illegal', expected 'legal'; ...
+  ...
+FAIL: 21 passed, 3 failed, 0 not implemented</code></pre>
+<p class="hint">上面这个 FAIL 例子来自一个把区间写成闭区间的实现：相接的 A、B 被误判为重叠。用例里有三个站点宽 0.19 的布局，直接用浮点数比较也会 FAIL。</p>
+<h2>完整的检查器</h2>
+<p>网页和测试用的完整实现在仓库的 <a href="https://github.com/su3037/legalization-lesson03-legality-metrics/tree/main/python/legality_metrics"><code>python/legality_metrics</code></a>：它还报告证据数值、诊断信息、更多输入错误码，并且附带四种修复算法和一个最小的 LEF/DEF 读取器（用于 gcd 演示）。</p>
+</main>
+<!--FOOT-->
+</body></html>

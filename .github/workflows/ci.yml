@@ -1,0 +1,43 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: npm ci
+      - run: pip install pytest==9.1.1 hypothesis==6.170.17
+      - name: JS tests
+        run: npm test
+      - name: Python tests
+        run: python -m pytest -q tests/py
+      - name: JS vs Python differential fuzz (3000 cases)
+        run: node tests/diff/fuzz.mjs
+      - name: Python exercise (reference must PASS, starter must be INCOMPLETE)
+        run: |
+          python python/exercise/check.py --impl reference | tail -1 | grep -q '^PASS'
+          python python/exercise/check.py | tail -1 | grep -q '^INCOMPLETE'
+      - name: Build site
+        run: node scripts/build-site.mjs
+      - name: Site end-to-end and axe-core (local build)
+        run: |
+          npm i --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+          (python scripts/serve.py 8803 &) ; sleep 2
+          node tests/e2e/site.mjs build/e2e-ci.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-ci
+          path: build/e2e-ci.json

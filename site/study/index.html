@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>学习效果研究 · 合法吗？</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
+<body><!--NAV-->
+<main id="main" class="page">
+<h1>学习效果研究（参与者页面）</h1>
+<p class="lead">谢谢你参加。整个过程约 50 分钟，不收集姓名，所有答案都由你下载后自己交给组织者。你可以随时退出。</p>
+<ol class="steps">
+<li><b>前测（约 8 分钟）</b>：<a href="{{BASE}}challenges/#inventory-pre">8 道概念题</a>。不要查资料，猜的也没关系，但请标出把握程度。下载文件 <code>inventory-pre-编号.json</code>。</li>
+<li><b>学习（约 20 分钟）</b>：看<a href="{{BASE}}film/">影片</a>，或者读<a href="{{BASE}}lesson/">讲解</a>（按组织者分配的那一种）。</li>
+<li><b>动手（约 15 分钟）</b>：在<a href="{{BASE}}challenges/">挑战页</a>做挑战 1–8，卡住可以看提示。做完回到这里，点下面的“导出挑战记录”。</li>
+<li><b>后测（约 8 分钟）</b>：<a href="{{BASE}}challenges/#inventory-post">同样 8 道题</a>，下载 <code>inventory-post-编号.json</code>。</li>
+<li><b>问卷（约 3 分钟）</b>：填下面的表，下载 <code>survey-编号.json</code>。</li>
+</ol>
+<div class="toolbar"><button id="export-progress">导出挑战记录</button><span id="ep" class="hint" aria-live="polite"></span></div>
+<h2>问卷</h2>
+<form id="s">
+<label>参与编号 <input name="pid" required pattern="[A-Za-z0-9_-]{1,20}"></label>
+<fieldset><legend>你学这一课用的是</legend><label><input type="radio" name="arm" value="film" required> 影片</label> <label><input type="radio" name="arm" value="text"> 讲解文字</label></fieldset>
+<fieldset><legend>之前学过布局或合法化吗？</legend><label><input type="radio" name="prior" value="none" required> 没有</label> <label><input type="radio" name="prior" value="some"> 听说过</label> <label><input type="radio" name="prior" value="course"> 上过相关课</label></fieldset>
+<fieldset><legend>这一课整体有多难？（1 很容易 – 5 很难）</legend>${R("difficulty")}</fieldset>
+<fieldset><legend>学完以后，你有多大把握自己写出一个检查器？（1 – 5）</legend>${R("confidence")}</fieldset>
+<label>哪一部分最难懂？<textarea name="hardest" rows="2"></textarea></label>
+<label>哪里有错误、看不清或不好用？<textarea name="problems" rows="2"></textarea></label>
+<button class="primary" type="submit">完成，下载问卷</button>
+</form>
+<div id="out" aria-live="polite"></div>
+<p class="hint">研究方案（目的、分组、样本量、分析方法、事先定好的判断标准）见仓库 <a href="https://github.com/su3037/legalization-lesson03-legality-metrics/blob/main/docs/learner-study.md">docs/learner-study.md</a>。</p>
+</main>
+<!--FOOT-->
+<script type="module">
+const R = (n) => [1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="${n}" value="${v}" required> ${v}</label>`).join(" ");
+const f = document.getElementById("s");
+f.innerHTML = f.innerHTML.replace(/\$\{R\("(\w+)"\)\}/g, (_, n) => R(n));
+const dl = (name, obj) => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1)], { type: "application/json" }));
+  a.download = name;
+  a.textContent = name;
+  a.className = "tag";
+  return a;
+};
+document.getElementById("export-progress").addEventListener("click", () => {
+  let p = null;
+  try { p = JSON.parse(localStorage.getItem("legality-l03-progress-v1") || "{}"); } catch {}
+  const ep = document.getElementById("ep");
+  if (!p) { ep.textContent = "浏览器不允许读取本地记录。"; return; }
+  const a = dl("challenges-progress.json", { at: new Date().toISOString(), progress: p });
+  ep.textContent = "";
+  ep.appendChild(a);
+  a.click();
+});
+f.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const o = Object.fromEntries(new FormData(f));
+  o.at = new Date().toISOString();
+  const a = dl(`survey-${o.pid}.json`, o);
+  const out = document.getElementById("out");
+  out.innerHTML = "<p>谢谢！请把下载的文件交给组织者。</p>";
+  out.appendChild(a);
+  a.click();
+});
+</script>
+</body></html>

@@ -146,3 +146,12 @@ test("off-row cells produce rectangle diagnostics, never OVERLAP", () => {
   assert.deepEqual(codes(r), ["ROW:A"]);
   assert.deepEqual(r.diagnostics.map((x) => x.cells.join("/")), ["A/C"]);
 });
+
+import { traceCheck } from "../../src/core/legality.js";
+test("step-through trace fails exactly where the full checker reports violations", () => {
+  for (const c of Object.values(cases.cases)) {
+    const { steps, report } = traceCheck(D, c.placement);
+    const failing = steps.filter((s) => !s.pass && !["VERDICT"].includes(s.rule)).map((s) => s.rule + ":" + s.cells.join("/"));
+    assert.deepEqual(failing, report.violations.map((v) => v.code + ":" + v.cells.join("/")));
+  }
+});

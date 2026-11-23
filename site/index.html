@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>合法吗？布局合法性检查与指标</title>
+<meta name="description" content="Module 03 · Legality Metrics：用五条规则判断一张标准单元布局是否合法，再用位移和半周长线长比较修复结果。">
+<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
+<body><!--NAV-->
+<main id="main" class="page">
+<h1>合法吗？——布局合法性检查与指标</h1>
+<p class="lead">全局布局给了每个单元一个坐标。这张布局能直接交给下一步吗？这一课先学会判断：它到底合不合法，合法以后又该怎么比较好坏。</p>
+
+<div class="hero">
+<div>
+<video controls preload="metadata" poster="{{BASE}}media/renders/sample.poster.jpg" aria-describedby="sample-note">
+<source src="{{BASE}}media/renders/sample.zh.captioned.mp4" type="video/mp4">
+</video>
+<p id="sample-note" class="hint">32 秒样片（第 11 段：两种修复办法，两套代价）。无配音，字幕已烧入画面；完整影片和文字稿在<a href="{{BASE}}film/">影片页</a>。为什么没有配音，见<a href="{{BASE}}verify/#voice">验证页</a>。</p>
+</div>
+<div class="card">
+<h2 style="margin-top:0">问题是什么</h2>
+<dl class="def">
+<dt>输入</dt><dd>芯片尺寸、行（底边 y、行高）、站点宽；每个单元的宽高；哪些单元是固定的；线网；以及一张布局（每个单元左下角的坐标）。</dd>
+<dt>输出</dt><dd>结论（合法 / 不合法 / 输入无效），全部违规清单（规则、单元、坐标），以及位移和半周长线长两个指标。</dd>
+<dt>约束</dt><dd>五条规则：在行上、对齐站点、整个单元在芯片内、同行不重叠（左闭右开，相接可以）、固定单元不动。</dd>
+<dt>目标</dt><dd>先合法，再比分数：位移小，线长短。分数救不了不合法的布局。</dd>
+<dt>假设</dt><dd>单元都是一行高；坐标是左下角；行和站点均匀；线网的引脚取单元中心。</dd>
+<dt>停止</dt><dd>输入无效时立即停止，不做几何检查；否则检查完每个单元和同一行的每一对单元，再给出结论。</dd>
+<dt>不包括</dt><dd>朝向、限定区域、禁止放置区、单元间距、多行高单元。这些在<a href="{{BASE}}lesson/#real">讲解第 9 节</a>里说明。</dd>
+</dl>
+</div>
+</div>
+
+<h2>怎么学</h2>
+<ol class="steps">
+<li><a href="{{BASE}}challenges/#inventory-pre">先做 8 道概念题</a>（约 5 分钟，可跳过），看看自己现在的想法。</li>
+<li>看<a href="{{BASE}}film/">影片</a>（约 6 分钟）或读<a href="{{BASE}}lesson/">讲解</a>：五条规则、检查器、两个指标、修复与最优。</li>
+<li>在<a href="{{BASE}}lab/">实验台</a>上拖动单元，看检查器逐行运行；影片任意一帧都能“在实验台打开”。</li>
+<li>完成 <a href="{{BASE}}challenges/">10 个挑战</a>：每题针对一个常见误区，按布局状态判分，正确答案不止一个。</li>
+<li>下载 <a href="{{BASE}}python/">Python 练习</a>，自己实现检查器，本地自测给出 PASS / INCOMPLETE / FAIL。</li>
+</ol>
+
+<h2>为什么要学这个</h2>
+<p>放置流程通常分三步：全局布局求出大致位置，合法化把单元放进行和站点、去掉重叠，详细布局再做局部优化。合法化的输出必须严格满足这些几何规则，否则布线和签核都无法继续。会写检查器，才能判断任何一个合法化算法的结果是否可信；会算指标，才能比较两个都合法的结果。</p>
+<div class="cards">
+<div class="card"><b>一个检查器，两种语言</b><p class="hint">JavaScript（网页）和 Python（练习）实现同一份<a href="https://github.com/su3037/legalization-lesson03-legality-metrics/blob/main/docs/checker-spec.md">规格</a>，3,000 个随机用例结果一致。</p></div>
+<div class="card"><b>三个独立参照</b><p class="hint">CP-SAT 精确最优、OpenROAD <code>check_placement</code>、性质测试与 18 个变异体（全部被抓到）。见<a href="{{BASE}}verify/">验证页</a>。</p></div>
+<div class="card"><b>真实小设计</b><p class="hint">在 OpenROAD 的 gcd 设计（461 个单元）上，检查器和 OpenROAD 在两边都检查的规则上结果一致。</p></div>
+</div>
+</main>
+<!--FOOT-->
+</body></html>

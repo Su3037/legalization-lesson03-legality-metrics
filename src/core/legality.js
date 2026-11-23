@@ -313,3 +313,62 @@ export function semantic(report) {
     disp: report.metrics && report.metrics.displacement ? report.metrics.displacement.total : null,
   };
 }
+
+// Pseudocode shown next to the step-through (line numbers are referenced by traceCheck).
+export const PSEUDOCODE = [
+  "输入：芯片、单元、线网、固定声明；布局；参考布局",
+  "若输入不完整或有非法数值 → 输入无效，停止",
+  "对每个单元 c：",
+  "  若 c.y 不是任何一行的底边 → 记 ROW",
+  "  若 (c.x − x0) 不是站点宽的整数倍 → 记 SITE",
+  "  若 c 的整个矩形不在芯片内 → 记 BOUNDS",
+  "  若 c 是固定单元且坐标变了 → 记 FIXED",
+  "对同一行里的每一对单元 (a, b)：",
+  "  若 [a.x, a.x+a.w) 与 [b.x, b.x+b.w) 相交 → 记 OVERLAP",
+  "合法 ⇔ 一条记录都没有；第一条记录 = 最先发现的错误",
+  "位移 = Σ |x−x参考| + |y−y参考|；HPWL = Σ 线网中心包围盒的宽 + 高",
+];
+
+// Step-by-step trace of the same checks, for teaching. Each step: {line, rule, cells, pass, evidence}.
+// The failing steps, in order, are exactly checkPlacement(...).violations (tested).
+export function traceCheck(design, placement, options = {}) {
+  const report = checkPlacement(design, placement, options);
+  const steps = [{ line: 1, rule: "VALID", cells: [], pass: report.verdict !== "invalid", evidence: { errors: report.errors.map((e) => e.code) } }];
+  if (report.verdict === "invalid") {
+    steps.push({ line: 9, rule: "VERDICT", cells: [], pass: false, evidence: { verdict: "invalid" } });
+    return { steps, report };
+  }
+  const d = normalizeDesign(design);
+  const fixedMode = options.fixedMode !== false;
+  const byKey = new Map(report.violations.map((v) => [v.code + ":" + v.cells.join("/"), v]));
+  const line = { ROW: 3, SITE: 4, BOUNDS: 5, FIXED: 6 };
+  for (const c of d.cells) {
+    for (const rule of ["ROW", "SITE", "BOUNDS", "FIXED"]) {
+      if (rule === "FIXED" && !(fixedMode && d.fixed[c.id])) continue;
+      const v = byKey.get(rule + ":" + c.id);
+      steps.push({ line: line[rule], rule, cells: [c.id], pass: !v, evidence: v ? v.evidence : null });
+    }
+  }
+  const u = d.chip.dbu;
+  const rowsD = d.chip.rows.map((y) => toDbu(y, u));
+  const rowOf = (id) => {
+    const y = toDbu(placement[id].y, u);
+    return Number.isInteger(y) ? rowsD.indexOf(y) : -1;
+  };
+  const pairs = [];
+  for (let i = 0; i < d.cells.length; i++)
+    for (let j = i + 1; j < d.cells.length; j++) {
+      const a = d.cells[i].id;
+      const b = d.cells[j].id;
+      const ra = rowOf(a);
+      if (ra >= 0 && ra === rowOf(b)) pairs.push([ra, i, j, a, b]);
+    }
+  pairs.sort((p, q) => p[0] - q[0] || p[1] - q[1] || p[2] - q[2]);
+  for (const [r, , , a, b] of pairs) {
+    const v = byKey.get("OVERLAP:" + a + "/" + b);
+    steps.push({ line: 8, rule: "OVERLAP", cells: [a, b], pass: !v, evidence: v ? v.evidence : { row: d.chip.rows[r] } });
+  }
+  steps.push({ line: 9, rule: "VERDICT", cells: [], pass: report.legal, evidence: { verdict: report.verdict, violations: report.violations.length } });
+  steps.push({ line: 10, rule: "METRICS", cells: [], pass: true, evidence: { hpwl: report.metrics.hpwl.total, displacement: report.metrics.displacement } });
+  return { steps, report };
+}

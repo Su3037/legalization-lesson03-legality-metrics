@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>盲听测试 · 合法吗？</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
+<body><!--NAV-->
+<main id="main" class="page">
+<h1>配音盲听测试</h1>
+<p class="lead">请母语为普通话的听众参加。你会听到同一段约 80 秒的讲解，由不同的声音朗读，顺序随机，不告诉你是谁。其中可能有真人录音，也可能有合成语音。</p>
+<div class="card">
+<h2 style="margin-top:0">怎么做（约 10 分钟）</h2>
+<ol>
+<li>戴耳机，在安静的地方。先用第一段把音量调到舒服，之后不要再调。</li>
+<li>每段至少完整听一遍。可以重听。</li>
+<li>给每段打两个分：<b>自然度</b>（像不像一位老师在自然地讲课）和<b>清楚度</b>（能不能轻松听清每个词）。再判断它是<b>真人</b>还是<b>机器</b>。</li>
+<li>全部完成后点“下载结果”，把文件发给测试组织者。页面不会上传任何东西。</li>
+</ol>
+<p class="hint">文字稿（听完再看）：<a href="#script" id="show-script">显示朗读文本</a></p>
+<pre id="script" hidden style="white-space:pre-wrap"></pre>
+</div>
+<form id="f">
+<label>参与编号（不要写姓名）<input name="pid" required pattern="[A-Za-z0-9_-]{1,20}"></label>
+<label>普通话是你的母语吗？<select name="native" required><option value="">—</option><option>是</option><option>否</option></select></label>
+<label>收听设备 <select name="device"><option>耳机</option><option>外放</option></select></label>
+<div id="clips"><p class="hint">载入中…</p></div>
+<button class="primary" type="submit">完成，下载结果</button>
+</form>
+<div id="out" aria-live="polite"></div>
+<h2>评分标准</h2>
+<div class="tablewrap"><table><thead><tr><th>分</th><th>自然度</th><th>清楚度</th></tr></thead><tbody>
+<tr><td>5</td><td>完全像真人老师在讲</td><td>毫不费力，每个词都清楚</td></tr>
+<tr><td>4</td><td>偶尔有一点不自然</td><td>基本清楚，偶尔要留意</td></tr>
+<tr><td>3</td><td>能听出不自然，但不影响</td><td>要用心听</td></tr>
+<tr><td>2</td><td>明显不自然，有点干扰</td><td>有几处听不清</td></tr>
+<tr><td>1</td><td>很不自然，难以听下去</td><td>很多地方听不清</td></tr>
+</tbody></table></div>
+<p class="hint">通过标准（事先定好，不会事后调整）：至少 8 位母语听众；平均自然度 ≥ 4.0；判断为“机器”的比例低于 30%。没有声音通过时，影片保持无配音版。</p>
+</main>
+<!--FOOT-->
+<script type="module">
+const B = "{{BASE}}";
+const m = await (await fetch(B + "listen/clips/manifest.json")).json();
+const order = m.clips.map((c) => [crypto.getRandomValues(new Uint32Array(1))[0], c]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+const box = document.getElementById("clips");
+const scale = (name, label) => `<fieldset><legend>${label}</legend>${[1, 2, 3, 4, 5].map((v) => `<label><input type="radio" name="${name}" value="${v}" required> ${v}</label>`).join(" ")}</fieldset>`;
+box.innerHTML = order.map((c, i) => `<section class="card" data-clip="${c}"><h3>第 ${i + 1} 段</h3>
+<audio controls preload="none" src="${B}listen/clips/${c}"></audio>
+${scale(`nat${i}`, "自然度")}${scale(`cla${i}`, "清楚度")}
+<fieldset><legend>你觉得这是</legend><label><input type="radio" name="hm${i}" value="human" required> 真人</label> <label><input type="radio" name="hm${i}" value="machine"> 机器</label></fieldset>
+<label>哪里听着别扭（可选）<input name="note${i}" style="width:100%"></label></section>`).join("");
+document.getElementById("show-script").addEventListener("click", async (e) => {
+  e.preventDefault();
+  const pre = document.getElementById("script");
+  pre.textContent = await (await fetch(B + "listen/audition.zh.txt")).text();
+  pre.hidden = false;
+});
+document.getElementById("f").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const rows = order.map((c, i) => ({ position: i + 1, clip: c, naturalness: +fd.get(`nat${i}`), clarity: +fd.get(`cla${i}`), judged: fd.get(`hm${i}`), note: fd.get(`note${i}`) || "" }));
+  const res = { pid: fd.get("pid"), native: fd.get("native"), device: fd.get("device"), at: new Date().toISOString(), rows };
+  const csv = ["pid,native,device,position,clip,naturalness,clarity,judged,note", ...rows.map((r) => [res.pid, res.native, res.device, r.position, r.clip, r.naturalness, r.clarity, r.judged, JSON.stringify(r.note)].join(","))].join("\n");
+  const out = document.getElementById("out");
+  out.innerHTML = "<p>谢谢！请把下面两个文件之一发给组织者：</p>";
+  for (const [ext, body, type] of [["json", JSON.stringify(res, null, 1), "application/json"], ["csv", csv, "text/csv"]]) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([body], { type }));
+    a.download = `listening-${res.pid}.${ext}`;
+    a.textContent = a.download;
+    a.className = "tag";
+    out.appendChild(a);
+  }
+  out.querySelector("a").click();
+});
+</script>
+</body></html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>影片 · 合法吗？</title>
+<link rel="stylesheet" href="{{BASE}}assets/site.css"></head>
+<body><!--NAV-->
+<main id="main" class="page">
+<h1>影片：合法吗？（约 6 分钟）</h1>
+<p class="lead">15 段，和讲解页的顺序一致。本版<strong>没有配音</strong>：我们筛查过的开源中文合成声音没有通过清晰度门槛，按约定先发布带字幕的无声版，详见<a href="{{BASE}}verify/#voice">验证页</a>。</p>
+<div class="toolbar" role="group" aria-label="版本">
+<label><input type="radio" name="ver" value="captioned" checked> 字幕烧入画面</label>
+<label><input type="radio" name="ver" value="clean"> 干净画面 + 可开关字幕</label>
+</div>
+<video id="v" controls preload="metadata" playsinline poster="{{BASE}}media/renders/film.poster.jpg">
+<source src="{{BASE}}media/renders/film.zh.captioned.mp4" type="video/mp4">
+<track kind="chapters" srclang="zh" src="{{BASE}}media/film/chapters.zh.vtt" default>
+</video>
+<div class="toolbar">
+<button id="to-lab" class="primary">在实验台打开这一帧</button>
+<span id="to-lab-msg" class="hint" aria-live="polite"></span>
+</div>
+<p class="hint">暂停在任意时刻，点上面的按钮，实验台会打开同一张布局（坐标、固定约束、位移参考都原样带过去），然后用完整检查器重新判定。影片由同一套代码逐帧确定地渲染：<code>renderAt(t)</code> 只依赖时间 t。</p>
+
+<h2>章节</h2>
+<ol class="chapters" id="chapters"></ol>
+
+<h2>下载</h2>
+<ul>
+<li><a href="{{BASE}}media/renders/film.zh.captioned.mp4" download>完整影片（字幕烧入，MP4）</a> · <a href="{{BASE}}media/renders/film.zh.clean.mp4" download>干净画面版</a></li>
+<li><a href="{{BASE}}media/film/film.zh.vtt" download>字幕 WebVTT</a> · <a href="{{BASE}}media/film/chapters.zh.vtt" download>章节 WebVTT</a> · <a href="{{BASE}}media/film/transcript.zh.md" download>文字稿</a></li>
+<li><a href="{{BASE}}media/renders/sample.zh.captioned.mp4" download>32 秒样片</a> · <a href="{{BASE}}downloads/module03-outline.md" download>课程大纲（Markdown）</a></li>
+</ul>
+
+<h2>文字稿</h2>
+<div id="transcript" class="card"><p class="hint">载入中…</p></div>
+</main>
+<!--FOOT-->
+<script type="module">
+import { buildWorld, stateAt } from "{{BASE}}src/film/timeline.js";
+const B = "{{BASE}}";
+const J = (u) => fetch(B + u).then((r) => r.json());
+const [raw, cases, trade, cpsat, gcd, clock] = await Promise.all([J("data/fixtures/tiny_legal.json"), J("data/fixtures/cases.json"), J("data/fixtures/tradeoff.json"), J("data/cpsat-results.json"), J("data/gcd-placement.json"), J("media/film/clock.zh.json")]);
+const W = buildWorld({ raw, cases: cases.cases, trade, cpsat, gcd });
+const v = document.getElementById("v");
+const fmt = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+document.getElementById("chapters").innerHTML = clock.cues.map((c, i) => `<li><a href="#t=${c.start}" data-t="${c.start}">${c.title}</a> <span class="hint">${fmt(c.start)}</span></li>`).join("");
+document.getElementById("chapters").addEventListener("click", (e) => {
+  const a = e.target.closest("a[data-t]");
+  if (!a) return;
+  e.preventDefault();
+  v.currentTime = +a.dataset.t;
+  v.focus();
+});
+for (const r of document.querySelectorAll('input[name="ver"]')) r.addEventListener("change", () => {
+  const t = v.currentTime;
+  const clean = r.value === "clean" && r.checked;
+  v.querySelector("source").src = B + `media/renders/film.zh.${clean ? "clean" : "captioned"}.mp4`;
+  for (const tr of v.querySelectorAll('track[kind="subtitles"]')) tr.remove();
+  if (clean) {
+    const tr = document.createElement("track");
+    Object.assign(tr, { kind: "subtitles", srclang: "zh", label: "中文", src: B + "media/film/film.zh.vtt", default: true });
+    v.appendChild(tr);
+  }
+  v.load();
+  v.currentTime = t;
+});
+const tm = location.hash.match(/t=([\d.]+)/);
+if (tm) v.currentTime = +tm[1];
+const RULE = ["在行上", "对齐站点", "整个在芯片内", "同行不重叠", "固定单元不动"];
+document.getElementById("to-lab").addEventListener("click", () => {
+  const t = v.currentTime;
+  const s = stateAt(W, clock, t);
+  const msg = document.getElementById("to-lab-msg");
+  if (!s.board || !s.board.placement || s.design !== W.design) {
+    msg.textContent = "这一帧不是开场的 6 单元布局（真实芯片或单独的一行示例），实验台打不开。请换一个时刻。";
+    return;
+  }
+  const st = { time: t.toFixed(1), placement: s.board.placement, fixedMode: s.board.fixedMode !== false };
+  if (s.board.reference) st.reference = { name: s.board.reference.name, placement: s.board.reference.placement };
+  if (s.panel && s.panel.kind === "rules" && s.panel.upto < 5) st.partial = RULE.slice(0, s.panel.upto).join("、");
+  const enc = btoa(unescape(encodeURIComponent(JSON.stringify(st))));
+  location.href = B + "lab/#state=" + encodeURIComponent(enc);
+});
+const md = await (await fetch(B + "media/film/transcript.zh.md")).text();
+const esc = (x) => x.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+document.getElementById("transcript").innerHTML = md.split(/\n(?=## )/).slice(1).map((sec) => {
+  const [h, ...body] = sec.split("\n");
+  return `<h3>${esc(h.replace(/^## /, ""))}</h3><p>${esc(body.join(" ").trim())}</p>`;
+}).join("");
+</script>
+</body></html>
