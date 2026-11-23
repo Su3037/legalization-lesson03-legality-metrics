@@ -1,0 +1,181 @@
+{
+ "source": "yongfu-li/eda-learning@003bcd49e3794e6cfd2680181cdbd347d673ad07 via evidence pack verification/source-checks.json",
+ "reference": "overlap_seed",
+ "cases": {
+  "overlap_seed": {
+   "zh": "初始重叠布局",
+   "en": "Overlap seed",
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 4,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "legal": false,
+    "displacement": 0.0,
+    "hpwl": 32.0
+   }
+  },
+  "illustrative_golden": {
+   "zh": "示意合法布局（教师 GOLDEN_PLACEMENT）",
+   "en": "Illustrative golden",
+   "placement": {
+    "A": {
+     "x": 0,
+     "y": 0
+    },
+    "B": {
+     "x": 2,
+     "y": 0
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "legal": true,
+    "displacement": 14.0,
+    "hpwl": 50.0
+   }
+  },
+  "overlap_removal": {
+   "zh": "重叠消除（教师 helper）输出",
+   "en": "Overlap-removal output",
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 6,
+     "y": 2
+    },
+    "C": {
+     "x": 8,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "legal": true,
+    "displacement": 6.0,
+    "hpwl": 32.0
+   }
+  },
+  "abacus_lite": {
+   "zh": "Abacus-lite（教师 helper）输出",
+   "en": "Abacus-lite output",
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 0
+    },
+    "C": {
+     "x": 4,
+     "y": 4
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "legal": true,
+    "displacement": 4.0,
+    "hpwl": 38.0
+   }
+  },
+  "greedy_snap_float": {
+   "zh": "浮点布局取整后",
+   "en": "Float starter after greedy snap",
+   "placement": {
+    "A": {
+     "x": 4,
+     "y": 2
+    },
+    "B": {
+     "x": 4,
+     "y": 2
+    },
+    "C": {
+     "x": 5,
+     "y": 2
+    },
+    "D": {
+     "x": 8,
+     "y": 4
+    },
+    "E": {
+     "x": 0,
+     "y": 4
+    },
+    "F": {
+     "x": 10,
+     "y": 0
+    }
+   },
+   "expected": {
+    "legal": false,
+    "displacement": 1.0,
+    "hpwl": 32.0
+   }
+  }
+ }
+}

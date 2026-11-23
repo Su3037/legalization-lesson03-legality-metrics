@@ -1,0 +1,491 @@
+{
+ "mutants": 18,
+ "caught_by_js_and_python": 18,
+ "mutation_score": 1.0,
+ "rows": [
+  {
+   "id": "M01",
+   "name": "half-site x shift",
+   "zh": "x 偏移半个站点",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "SITE:F"
+    ]
+   },
+   "js": [
+    "SITE:F"
+   ],
+   "js_ok": true,
+   "py": [
+    "SITE:F"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Site aligned:F"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Site aligned:F"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M02",
+   "name": "y between rows",
+   "zh": "y 落在两行之间",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "ROW:C"
+    ]
+   },
+   "js": [
+    "ROW:C"
+   ],
+   "js_ok": true,
+   "py": [
+    "ROW:C"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Overlap:C,E",
+    "Site aligned:C"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Overlap:C,E",
+    "Site aligned:C"
+   ],
+   "openroad_agrees": true,
+   "scope_note": "OpenROAD tests the full rectangle, so the off-row C also hits E above it; our checker reports the same pair as a RECT_INTERSECT diagnostic, not as OVERLAP"
+  },
+  {
+   "id": "M03",
+   "name": "right edge one unit outside (anchor inside)",
+   "zh": "锚点在内，右边缘出界一格",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "BOUNDS:F"
+    ]
+   },
+   "js": [
+    "BOUNDS:F"
+   ],
+   "js_ok": true,
+   "py": [
+    "BOUNDS:F"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Placed in rows:F"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Placed in rows:F"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M04",
+   "name": "wide cell crosses right edge",
+   "zh": "宽单元跨出右边界",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "BOUNDS:B"
+    ]
+   },
+   "js": [
+    "BOUNDS:B"
+   ],
+   "js_ok": true,
+   "py": [
+    "BOUNDS:B"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Placed in rows:B"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Placed in rows:B"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M05",
+   "name": "touching edges (must pass)",
+   "zh": "边界相接（必须合法）",
+   "expect": {
+    "verdict": "legal",
+    "codes": []
+   },
+   "js": [],
+   "js_ok": true,
+   "py": [],
+   "py_ok": true,
+   "openroad": [],
+   "openroad_status": "PASS",
+   "openroad_expected": [],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M06",
+   "name": "one site of overlap",
+   "zh": "重叠一个站点",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "OVERLAP:A/B"
+    ]
+   },
+   "js": [
+    "OVERLAP:A/B"
+   ],
+   "js_ok": true,
+   "py": [
+    "OVERLAP:A/B"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Overlap:A,B"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Overlap:A,B"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M07",
+   "name": "full containment",
+   "zh": "窄单元完全落在宽单元里",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "OVERLAP:C/E"
+    ]
+   },
+   "js": [
+    "OVERLAP:C/E"
+   ],
+   "js_ok": true,
+   "py": [
+    "OVERLAP:C/E"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Overlap:C,E"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Overlap:C,E"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M08",
+   "name": "moved fixed cell",
+   "zh": "固定单元被挪动",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "FIXED:D"
+    ]
+   },
+   "js": [
+    "FIXED:D"
+   ],
+   "js_ok": true,
+   "py": [
+    "FIXED:D"
+   ],
+   "py_ok": true,
+   "openroad": [],
+   "openroad_status": "PASS",
+   "openroad_expected": [],
+   "openroad_agrees": true,
+   "scope_note": "check_placement has no reference placement, so it cannot know D moved (scope difference)"
+  },
+  {
+   "id": "M09",
+   "name": "duplicate id",
+   "zh": "单元编号重复",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_DUP_ID:A"
+    ]
+   },
+   "js": [
+    "V_DUP_ID:A"
+   ],
+   "js_ok": true,
+   "py": [
+    "V_DUP_ID:A"
+   ],
+   "py_ok": true,
+   "openroad": null,
+   "openroad_status": "OpenROAD error: [ERROR ODB-0385] Attempt to create instance with duplicate name: A",
+   "openroad_expected": "read_def error",
+   "openroad_agrees": null,
+   "scope_note": "the DEF reader rejects or merges the duplicate before the checker runs"
+  },
+  {
+   "id": "M10",
+   "name": "missing cell",
+   "zh": "缺少单元",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_MISSING:F"
+    ]
+   },
+   "js": [
+    "V_MISSING:F"
+   ],
+   "js_ok": true,
+   "py": [
+    "V_MISSING:F"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Overlap:A,F",
+    "Placed:F"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Overlap:A,F",
+    "Placed:F"
+   ],
+   "openroad_agrees": true,
+   "scope_note": "UNPLACED F sits at (0,0) inside OpenROAD, so it also collides with A; our checker stops at validation"
+  },
+  {
+   "id": "M11",
+   "name": "NaN coordinate",
+   "zh": "坐标为 NaN",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_NONFINITE:A"
+    ]
+   },
+   "js": [
+    "V_NONFINITE:A"
+   ],
+   "js_ok": true,
+   "py": [
+    "V_NONFINITE:A"
+   ],
+   "py_ok": true,
+   "openroad": null,
+   "openroad_status": "not expressible in DEF",
+   "openroad_expected": "not expressible",
+   "openroad_agrees": null,
+   "scope_note": "DEF coordinates are integers; NaN cannot be written"
+  },
+  {
+   "id": "M12",
+   "name": "empty placement",
+   "zh": "空布局",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_EMPTY:"
+    ]
+   },
+   "js": [
+    "V_EMPTY:"
+   ],
+   "js_ok": true,
+   "py": [
+    "V_EMPTY:"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Overlap:A,B,C,D,E,F",
+    "Placed:A,B,C,D,E,F"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Overlap:A,B,C,D,E,F",
+    "Placed:A,B,C,D,E,F"
+   ],
+   "openroad_agrees": true,
+   "scope_note": "every cell UNPLACED; same artefact as M10"
+  },
+  {
+   "id": "M13",
+   "name": "left edge outside",
+   "zh": "左边缘出界",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "BOUNDS:A"
+    ]
+   },
+   "js": [
+    "BOUNDS:A"
+   ],
+   "js_ok": true,
+   "py": [
+    "BOUNDS:A"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Placed in rows:A"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Placed in rows:A"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M14",
+   "name": "above the top row",
+   "zh": "放在最上一行之上",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "ROW:E",
+     "BOUNDS:E"
+    ]
+   },
+   "js": [
+    "ROW:E",
+    "BOUNDS:E"
+   ],
+   "js_ok": true,
+   "py": [
+    "ROW:E",
+    "BOUNDS:E"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Placed in rows:E"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Placed in rows:E"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M15",
+   "name": "unknown cell",
+   "zh": "未声明的单元",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_UNKNOWN:Z"
+    ]
+   },
+   "js": [
+    "V_UNKNOWN:Z"
+   ],
+   "js_ok": true,
+   "py": [
+    "V_UNKNOWN:Z"
+   ],
+   "py_ok": true,
+   "openroad": null,
+   "openroad_status": "not expressible in DEF",
+   "openroad_expected": "not expressible",
+   "openroad_agrees": null,
+   "scope_note": "a DEF component needs a declared master; an undeclared cell cannot be written"
+  },
+  {
+   "id": "M16",
+   "name": "wrong orientation (DEF only)",
+   "zh": "朝向与行不符（仅 DEF）",
+   "expect": {
+    "verdict": "legal",
+    "codes": []
+   },
+   "js": [],
+   "js_ok": true,
+   "py": [],
+   "py_ok": true,
+   "openroad": [],
+   "openroad_status": "PASS",
+   "openroad_expected": [],
+   "openroad_agrees": true,
+   "scope_note": "orientation is outside the toy model; this OpenROAD version's check_placement does not check it either (see docs/oracles.md)"
+  },
+  {
+   "id": "M17",
+   "name": "one DBU over the die edge",
+   "zh": "超出芯片边缘 1 个数据库单位",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "SITE:F",
+     "BOUNDS:F"
+    ]
+   },
+   "js": [
+    "SITE:F",
+    "BOUNDS:F"
+   ],
+   "js_ok": true,
+   "py": [
+    "SITE:F",
+    "BOUNDS:F"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Placed in rows:F",
+    "Site aligned:F"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Placed in rows:F",
+    "Site aligned:F"
+   ],
+   "openroad_agrees": true,
+   "scope_note": ""
+  },
+  {
+   "id": "M18",
+   "name": "overlap on an off-row pair (diagnostic only)",
+   "zh": "离行单元与他人相交（只作诊断）",
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "ROW:E"
+    ]
+   },
+   "js": [
+    "ROW:E"
+   ],
+   "js_ok": true,
+   "py": [
+    "ROW:E"
+   ],
+   "py_ok": true,
+   "openroad": [
+    "Overlap:C,E",
+    "Site aligned:E"
+   ],
+   "openroad_status": "FAIL",
+   "openroad_expected": [
+    "Site aligned:E",
+    "Overlap:C,E"
+   ],
+   "openroad_agrees": true,
+   "scope_note": "OpenROAD reports the C/E rectangle hit as Overlap; ours reports it as a RECT_INTERSECT diagnostic"
+  }
+ ]
+}

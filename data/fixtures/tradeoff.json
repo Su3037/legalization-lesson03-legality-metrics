@@ -1,0 +1,9 @@
+{
+  "notes": "Sum versus maximum displacement. One row, W=10. X (width 2) was dropped on top of A at x=0. Either X jumps right past A-D (one big move) or A-D all shift right by 2 (many small moves).",
+  "chip": {"W": 10, "H": 2, "siteW": 1, "rowH": 2, "rows": [0]},
+  "cells": [{"id": "A", "width": 1}, {"id": "B", "width": 1}, {"id": "C", "width": 1}, {"id": "D", "width": 1}, {"id": "X", "width": 2}],
+  "nets": [["A", "B"], ["C", "D"], ["X", "A"]],
+  "reference": {"A": {"x": 0, "y": 0}, "B": {"x": 1, "y": 0}, "C": {"x": 2, "y": 0}, "D": {"x": 3, "y": 0}, "X": {"x": 0, "y": 0}},
+  "jump": {"A": {"x": 0, "y": 0}, "B": {"x": 1, "y": 0}, "C": {"x": 2, "y": 0}, "D": {"x": 3, "y": 0}, "X": {"x": 4, "y": 0}},
+  "shift": {"A": {"x": 2, "y": 0}, "B": {"x": 3, "y": 0}, "C": {"x": 4, "y": 0}, "D": {"x": 5, "y": 0}, "X": {"x": 0, "y": 0}}
+}

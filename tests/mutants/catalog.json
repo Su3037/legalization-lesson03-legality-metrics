@@ -1,0 +1,352 @@
+{
+ "base": "illustrative_golden",
+ "notes": "Single-fault injections on the legal illustrative golden placement (A(0,0) B(2,0) C(0,2) D(8,4) fixed, E(0,4) F(10,0)). 'expect' lists the semantic outcome every implementation must produce. 'def' says how the mutant is written for OpenROAD; 'openroad' is what OpenROAD check_placement is expected to report, or why it cannot see the fault.",
+ "mutants": [
+  {
+   "id": "M01",
+   "name": "half-site x shift",
+   "zh": "x 偏移半个站点",
+   "set": {
+    "F": {
+     "x": 10.5,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "SITE:F"
+    ]
+   },
+   "openroad": [
+    "Site aligned:F"
+   ]
+  },
+  {
+   "id": "M02",
+   "name": "y between rows",
+   "zh": "y 落在两行之间",
+   "set": {
+    "C": {
+     "x": 0,
+     "y": 3
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "ROW:C"
+    ]
+   },
+   "openroad": [
+    "Overlap:C,E",
+    "Site aligned:C"
+   ],
+   "openroad_scope": "OpenROAD tests the full rectangle, so the off-row C also hits E above it; our checker reports the same pair as a RECT_INTERSECT diagnostic, not as OVERLAP"
+  },
+  {
+   "id": "M03",
+   "name": "right edge one unit outside (anchor inside)",
+   "zh": "锚点在内，右边缘出界一格",
+   "set": {
+    "F": {
+     "x": 12,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "BOUNDS:F"
+    ]
+   },
+   "openroad": [
+    "Placed in rows:F"
+   ]
+  },
+  {
+   "id": "M04",
+   "name": "wide cell crosses right edge",
+   "zh": "宽单元跨出右边界",
+   "set": {
+    "B": {
+     "x": 11,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "BOUNDS:B"
+    ]
+   },
+   "openroad": [
+    "Placed in rows:B"
+   ]
+  },
+  {
+   "id": "M05",
+   "name": "touching edges (must pass)",
+   "zh": "边界相接（必须合法）",
+   "set": {
+    "E": {
+     "x": 2,
+     "y": 4
+    }
+   },
+   "expect": {
+    "verdict": "legal",
+    "codes": []
+   },
+   "openroad": []
+  },
+  {
+   "id": "M06",
+   "name": "one site of overlap",
+   "zh": "重叠一个站点",
+   "set": {
+    "B": {
+     "x": 1,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "OVERLAP:A/B"
+    ]
+   },
+   "openroad": [
+    "Overlap:A,B"
+   ]
+  },
+  {
+   "id": "M07",
+   "name": "full containment",
+   "zh": "窄单元完全落在宽单元里",
+   "set": {
+    "E": {
+     "x": 1,
+     "y": 2
+    },
+    "C": {
+     "x": 0,
+     "y": 2
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "OVERLAP:C/E"
+    ]
+   },
+   "openroad": [
+    "Overlap:C,E"
+   ]
+  },
+  {
+   "id": "M08",
+   "name": "moved fixed cell",
+   "zh": "固定单元被挪动",
+   "set": {
+    "D": {
+     "x": 6,
+     "y": 4
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "FIXED:D"
+    ]
+   },
+   "openroad": [],
+   "openroad_scope": "check_placement has no reference placement, so it cannot know D moved (scope difference)"
+  },
+  {
+   "id": "M09",
+   "name": "duplicate id",
+   "zh": "单元编号重复",
+   "dup": "A",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_DUP_ID:A"
+    ]
+   },
+   "openroad": "read_def error",
+   "openroad_scope": "the DEF reader rejects or merges the duplicate before the checker runs"
+  },
+  {
+   "id": "M10",
+   "name": "missing cell",
+   "zh": "缺少单元",
+   "delete": "F",
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_MISSING:F"
+    ]
+   },
+   "openroad": [
+    "Overlap:A,F",
+    "Placed:F"
+   ],
+   "openroad_scope": "UNPLACED F sits at (0,0) inside OpenROAD, so it also collides with A; our checker stops at validation"
+  },
+  {
+   "id": "M11",
+   "name": "NaN coordinate",
+   "zh": "坐标为 NaN",
+   "set": {
+    "A": {
+     "x": "NaN",
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_NONFINITE:A"
+    ]
+   },
+   "openroad": "not expressible",
+   "openroad_scope": "DEF coordinates are integers; NaN cannot be written"
+  },
+  {
+   "id": "M12",
+   "name": "empty placement",
+   "zh": "空布局",
+   "empty": true,
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_EMPTY:"
+    ]
+   },
+   "openroad": [
+    "Overlap:A,B,C,D,E,F",
+    "Placed:A,B,C,D,E,F"
+   ],
+   "openroad_scope": "every cell UNPLACED; same artefact as M10"
+  },
+  {
+   "id": "M13",
+   "name": "left edge outside",
+   "zh": "左边缘出界",
+   "set": {
+    "A": {
+     "x": -1,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "BOUNDS:A"
+    ]
+   },
+   "openroad": [
+    "Placed in rows:A"
+   ]
+  },
+  {
+   "id": "M14",
+   "name": "above the top row",
+   "zh": "放在最上一行之上",
+   "set": {
+    "E": {
+     "x": 0,
+     "y": 6
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "ROW:E",
+     "BOUNDS:E"
+    ]
+   },
+   "openroad": [
+    "Placed in rows:E"
+   ]
+  },
+  {
+   "id": "M15",
+   "name": "unknown cell",
+   "zh": "未声明的单元",
+   "extra": {
+    "Z": {
+     "x": 6,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "invalid",
+    "codes": [
+     "V_UNKNOWN:Z"
+    ]
+   },
+   "openroad": "not expressible",
+   "openroad_scope": "a DEF component needs a declared master; an undeclared cell cannot be written"
+  },
+  {
+   "id": "M16",
+   "name": "wrong orientation (DEF only)",
+   "zh": "朝向与行不符（仅 DEF）",
+   "orient": {
+    "A": "FS"
+   },
+   "expect": {
+    "verdict": "legal",
+    "codes": []
+   },
+   "openroad": [],
+   "openroad_scope": "orientation is outside the toy model; this OpenROAD version's check_placement does not check it either (see docs/oracles.md)"
+  },
+  {
+   "id": "M17",
+   "name": "one DBU over the die edge",
+   "zh": "超出芯片边缘 1 个数据库单位",
+   "set": {
+    "F": {
+     "x": 11.001,
+     "y": 0
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "SITE:F",
+     "BOUNDS:F"
+    ]
+   },
+   "openroad": [
+    "Placed in rows:F",
+    "Site aligned:F"
+   ]
+  },
+  {
+   "id": "M18",
+   "name": "overlap on an off-row pair (diagnostic only)",
+   "zh": "离行单元与他人相交（只作诊断）",
+   "set": {
+    "E": {
+     "x": 0,
+     "y": 3
+    }
+   },
+   "expect": {
+    "verdict": "illegal",
+    "codes": [
+     "ROW:E"
+    ]
+   },
+   "openroad": [
+    "Site aligned:E",
+    "Overlap:C,E"
+   ],
+   "openroad_scope": "OpenROAD reports the C/E rectangle hit as Overlap; ours reports it as a RECT_INTERSECT diagnostic"
+  }
+ ]
+}

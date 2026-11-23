@@ -1,0 +1,603 @@
+OpenROAD 2.0-12381-g01bba3695 
+This program is licensed under the BSD-3 license. See the LICENSE file for details.
+Components of this program may be licensed under more restrictive licenses which must be honored.
+[INFO ODB-0222] Reading LEF file: /opt/openroad-src/test/Nangate45/Nangate45_tech.lef
+[INFO ODB-0223]     Created 22 technology layers
+[INFO ODB-0224]     Created 27 technology vias
+[INFO ODB-0226] Finished LEF file:  /opt/openroad-src/test/Nangate45/Nangate45_tech.lef
+[INFO ODB-0222] Reading LEF file: /opt/openroad-src/test/Nangate45/Nangate45_stdcell.lef
+[INFO ODB-0225]     Created 135 library cells
+[INFO ODB-0226] Finished LEF file:  /opt/openroad-src/test/Nangate45/Nangate45_stdcell.lef
+[INFO IFP-0001] Added 57 rows of 422 site FreePDK45_38x28_10R_NP_162NW_34O.
+[INFO RSZ-0026] Removed 15 buffers.
+Found 0 macro blocks.
+Using 2 tracks default min distance between IO pins.
+[INFO PPL-0007] Random pin placement.
+[INFO TAP-0004] Inserted 114 endcaps.
+[INFO TAP-0005] Inserted 0 tapcells.
+[INFO GPL-0002] DBU: 2000
+[INFO GPL-0003] SiteSize: 380 2800
+[INFO GPL-0004] CoreAreaLxLy: 20140 22400
+[INFO GPL-0005] CoreAreaUxUy: 180500 182000
+[INFO GPL-0006] NumInstances: 461
+[INFO GPL-0007] NumPlaceInstances: 347
+[INFO GPL-0008] NumFixedInstances: 114
+[INFO GPL-0009] NumDummyInstances: 0
+[INFO GPL-0010] NumNets: 418
+[INFO GPL-0011] NumPins: 1187
+[INFO GPL-0012] DieAreaLxLy: 0 0
+[INFO GPL-0013] DieAreaUxUy: 200260 201600
+[INFO GPL-0014] CoreAreaLxLy: 20140 22400
+[INFO GPL-0015] CoreAreaUxUy: 180500 182000
+[INFO GPL-0016] CoreArea: 25593456000
+[INFO GPL-0017] NonPlaceInstsArea: 121296000
+[INFO GPL-0018] PlaceInstsArea: 3482472000
+[INFO GPL-0019] Util(%): 13.67
+[INFO GPL-0020] StdInstsArea: 3482472000
+[INFO GPL-0021] MacroInstsArea: 0
+[InitialPlace]  Iter: 1 CG residual: 0.00000011 HPWL: 13148740
+[InitialPlace]  Iter: 2 CG residual: 0.00000006 HPWL: 10607428
+[InitialPlace]  Iter: 3 CG residual: 0.00000009 HPWL: 10616313
+[InitialPlace]  Iter: 4 CG residual: 0.00000008 HPWL: 10618610
+[InitialPlace]  Iter: 5 CG residual: 0.00000012 HPWL: 10627313
+[INFO GPL-0031] FillerInit: NumGCells: 783
+[INFO GPL-0032] FillerInit: NumGNets: 418
+[INFO GPL-0033] FillerInit: NumGPins: 1187
+[INFO GPL-0023] TargetDensity: 0.30
+[INFO GPL-0024] AveragePlaceInstArea: 10035942
+[INFO GPL-0025] IdealBinArea: 33453138
+[INFO GPL-0026] IdealBinCnt: 765
+[INFO GPL-0027] TotalBinArea: 25593456000
+[INFO GPL-0028] BinCnt: 16 16
+[INFO GPL-0029] BinSize: 10023 9975
+[INFO GPL-0030] NumBins: 256
+[NesterovSolve] Iter: 1 overflow: 0.800715 HPWL: 9924631
+[NesterovSolve] Iter: 10 overflow: 0.450477 HPWL: 11728614
+[NesterovSolve] Iter: 20 overflow: 0.449019 HPWL: 11264933
+[NesterovSolve] Iter: 30 overflow: 0.448032 HPWL: 11379247
+[NesterovSolve] Iter: 40 overflow: 0.449934 HPWL: 11359471
+[NesterovSolve] Iter: 50 overflow: 0.451199 HPWL: 11379867
+[NesterovSolve] Iter: 60 overflow: 0.450005 HPWL: 11365118
+[NesterovSolve] Iter: 70 overflow: 0.450364 HPWL: 11369404
+[NesterovSolve] Iter: 80 overflow: 0.449853 HPWL: 11365326
+[NesterovSolve] Iter: 90 overflow: 0.450047 HPWL: 11367927
+[NesterovSolve] Iter: 100 overflow: 0.449767 HPWL: 11366937
+[NesterovSolve] Iter: 110 overflow: 0.449738 HPWL: 11367656
+[NesterovSolve] Iter: 120 overflow: 0.449428 HPWL: 11369221
+[NesterovSolve] Iter: 130 overflow: 0.448947 HPWL: 11371001
+[NesterovSolve] Iter: 140 overflow: 0.448107 HPWL: 11373756
+[NesterovSolve] Iter: 150 overflow: 0.446986 HPWL: 11377160
+[NesterovSolve] Iter: 160 overflow: 0.44538 HPWL: 11380435
+[NesterovSolve] Iter: 170 overflow: 0.442983 HPWL: 11378214
+[NesterovSolve] Iter: 180 overflow: 0.439075 HPWL: 11363295
+[NesterovSolve] Iter: 190 overflow: 0.433168 HPWL: 11344359
+[NesterovSolve] Iter: 200 overflow: 0.423692 HPWL: 11331596
+[NesterovSolve] Iter: 210 overflow: 0.409123 HPWL: 11287385
+[NesterovSolve] Iter: 220 overflow: 0.38877 HPWL: 11202988
+[NesterovSolve] Iter: 230 overflow: 0.365836 HPWL: 11103294
+[NesterovSolve] Iter: 240 overflow: 0.338226 HPWL: 11052500
+[NesterovSolve] Iter: 250 overflow: 0.305083 HPWL: 10912563
+[NesterovSolve] Iter: 260 overflow: 0.276057 HPWL: 10867020
+[NesterovSolve] Iter: 270 overflow: 0.256763 HPWL: 10884705
+[NesterovSolve] Iter: 280 overflow: 0.232875 HPWL: 10845943
+[NesterovSolve] Iter: 290 overflow: 0.212732 HPWL: 10825767
+[NesterovSolve] Iter: 300 overflow: 0.186241 HPWL: 10836348
+[NesterovSolve] Iter: 310 overflow: 0.173152 HPWL: 10860664
+[NesterovSolve] Iter: 320 overflow: 0.149292 HPWL: 10834612
+[NesterovSolve] Iter: 330 overflow: 0.123359 HPWL: 10833321
+[NesterovSolve] Iter: 340 overflow: 0.107145 HPWL: 10838566
+[NesterovSolve] Finished with Overflow: 0.098996
+=== check_placement after global placement (expected to fail) ===
+[WARNING DPL-0005] Overlap check failed (147).
+ _347_ overlaps _345_
+ _350_ overlaps _347_
+ _351_ overlaps _350_
+ _360_ overlaps _359_
+ _361_ overlaps _358_
+ _363_ overlaps _362_
+ _366_ overlaps _365_
+ _380_ overlaps _369_
+ _382_ overlaps _380_
+ _386_ overlaps _372_
+ _387_ overlaps _372_
+ _389_ overlaps _373_
+ _391_ overlaps _374_
+ _393_ overlaps _371_
+ _404_ overlaps _403_
+ _405_ overlaps _395_
+ _406_ overlaps _397_
+ _409_ overlaps _399_
+ _410_ overlaps _400_
+ _411_ overlaps _400_
+ _415_ overlaps _403_
+ _422_ overlaps _419_
+ _437_ overlaps _436_
+ _438_ overlaps _433_
+ _439_ overlaps _435_
+ _440_ overlaps _350_
+ _442_ overlaps _441_
+ _449_ overlaps _366_
+ _450_ overlaps _370_
+ _452_ overlaps _376_
+ _454_ overlaps _369_
+ _455_ overlaps _383_
+ _456_ overlaps _384_
+ _457_ overlaps _390_
+ _459_ overlaps _457_
+ _460_ overlaps _374_
+ _461_ overlaps _388_
+ _465_ overlaps _399_
+ _466_ overlaps _404_
+ _467_ overlaps _414_
+ _468_ overlaps _397_
+ _471_ overlaps _397_
+ _472_ overlaps _407_
+ _473_ overlaps _395_
+ _477_ overlaps _476_
+ _478_ overlaps _477_
+ _479_ overlaps _430_
+ _486_ overlaps _371_
+ _498_ overlaps _490_
+ _500_ overlaps _493_
+ _503_ overlaps _497_
+ _504_ overlaps _497_
+ _505_ overlaps _501_
+ _506_ overlaps _498_
+ _507_ overlaps _435_
+ _509_ overlaps _479_
+ _510_ overlaps _426_
+ _511_ overlaps _421_
+ _514_ overlaps _415_
+ _515_ overlaps _424_
+ _517_ overlaps _516_
+ _520_ overlaps _519_
+ _522_ overlaps _519_
+ _529_ overlaps _528_
+ _541_ overlaps _540_
+ _542_ overlaps _381_
+ _547_ overlaps _530_
+ _550_ overlaps _549_
+ _551_ overlaps _549_
+ _554_ overlaps _553_
+ _556_ overlaps _396_
+ _557_ overlaps _556_
+ _563_ overlaps _562_
+ _564_ overlaps _562_
+ _566_ overlaps _565_
+ _567_ overlaps _566_
+ _569_ overlaps _568_
+ _570_ overlaps _428_
+ _573_ overlaps _572_
+ _574_ overlaps _517_
+ _575_ overlaps _517_
+ _576_ overlaps _443_
+ _578_ overlaps _575_
+ _590_ overlaps _351_
+ _592_ overlaps _524_
+ _593_ overlaps _523_
+ _605_ overlaps _537_
+ _608_ overlaps _606_
+ _609_ overlaps _608_
+ _611_ overlaps _610_
+ _614_ overlaps _489_
+ _615_ overlaps _489_
+ _630_ overlaps _628_
+ _633_ overlaps _632_
+ _637_ overlaps _636_
+ _639_ overlaps _469_
+ _641_ overlaps _397_
+ _642_ overlaps _397_
+ _644_ overlaps _643_
+ _646_ overlaps _559_
+ _647_ overlaps _646_
+ _648_ overlaps _646_
+ _652_ overlaps _650_
+ _653_ overlaps _650_
+ _655_ overlaps _418_
+ _659_ overlaps _657_
+ _660_ overlaps _509_
+ _663_ overlaps _662_
+ _665_ overlaps _435_
+ _667_ overlaps _666_
+ _668_ overlaps _481_
+ _670_ overlaps _669_
+ _672_ overlaps _501_
+ _673_ overlaps _500_
+ _674_ overlaps _492_
+ _675_ overlaps _348_
+ _676_ overlaps _525_
+ _677_ overlaps _357_
+ _678_ overlaps _532_
+ _679_ overlaps _377_
+ _680_ overlaps _542_
+ _681_ overlaps _545_
+ _682_ overlaps _548_
+ _683_ overlaps _550_
+ _684_ overlaps _485_
+ _685_ overlaps _556_
+ _686_ overlaps _394_
+ _687_ overlaps _562_
+ _688_ overlaps _656_
+ _689_ overlaps _569_
+ _690_ overlaps _434_
+ _691_ overlaps _583_
+ _692_ overlaps _592_
+ _693_ overlaps _598_
+ _694_ overlaps _604_
+ _695_ overlaps _609_
+ _696_ overlaps _489_
+ _697_ overlaps _619_
+ _698_ overlaps _625_
+ _699_ overlaps _628_
+ _700_ overlaps _636_
+ _701_ overlaps _642_
+ _702_ overlaps _647_
+ _703_ overlaps _513_
+ _704_ overlaps _657_
+ _705_ overlaps _428_
+ _706_ overlaps _671_
+[WARNING DPL-0006] Site aligned check failed (347).
+ _345_
+ _347_
+ _348_
+ _349_
+ _350_
+ _351_
+ _352_
+ _353_
+ _354_
+ _355_
+ _356_
+ _357_
+ _358_
+ _359_
+ _360_
+ _361_
+ _362_
+ _363_
+ _364_
+ _365_
+ _366_
+ _367_
+ _369_
+ _370_
+ _371_
+ _372_
+ _373_
+ _374_
+ _375_
+ _376_
+ _377_
+ _378_
+ _379_
+ _380_
+ _381_
+ _382_
+ _383_
+ _384_
+ _385_
+ _386_
+ _387_
+ _388_
+ _389_
+ _390_
+ _391_
+ _392_
+ _393_
+ _394_
+ _395_
+ _396_
+ _397_
+ _398_
+ _399_
+ _400_
+ _401_
+ _402_
+ _403_
+ _404_
+ _405_
+ _406_
+ _407_
+ _408_
+ _409_
+ _410_
+ _411_
+ _412_
+ _413_
+ _414_
+ _415_
+ _416_
+ _417_
+ _418_
+ _419_
+ _420_
+ _421_
+ _422_
+ _423_
+ _424_
+ _425_
+ _426_
+ _427_
+ _428_
+ _429_
+ _430_
+ _431_
+ _432_
+ _433_
+ _434_
+ _435_
+ _436_
+ _437_
+ _438_
+ _439_
+ _440_
+ _441_
+ _442_
+ _443_
+ _444_
+ _445_
+ _446_
+ _447_
+ _448_
+ _449_
+ _450_
+ _451_
+ _452_
+ _453_
+ _454_
+ _455_
+ _456_
+ _457_
+ _458_
+ _459_
+ _460_
+ _461_
+ _462_
+ _463_
+ _464_
+ _465_
+ _466_
+ _467_
+ _468_
+ _469_
+ _470_
+ _471_
+ _472_
+ _473_
+ _474_
+ _475_
+ _476_
+ _477_
+ _478_
+ _479_
+ _480_
+ _481_
+ _482_
+ _483_
+ _484_
+ _485_
+ _486_
+ _487_
+ _488_
+ _489_
+ _490_
+ _492_
+ _493_
+ _497_
+ _498_
+ _500_
+ _501_
+ _503_
+ _504_
+ _505_
+ _506_
+ _507_
+ _508_
+ _509_
+ _510_
+ _511_
+ _512_
+ _513_
+ _514_
+ _515_
+ _516_
+ _517_
+ _519_
+ _520_
+ _522_
+ _523_
+ _524_
+ _525_
+ _526_
+ _527_
+ _528_
+ _529_
+ _530_
+ _531_
+ _532_
+ _533_
+ _536_
+ _537_
+ _538_
+ _539_
+ _540_
+ _541_
+ _542_
+ _543_
+ _544_
+ _545_
+ _546_
+ _547_
+ _548_
+ _549_
+ _550_
+ _551_
+ _552_
+ _553_
+ _554_
+ _555_
+ _556_
+ _557_
+ _558_
+ _559_
+ _560_
+ _561_
+ _562_
+ _563_
+ _564_
+ _565_
+ _566_
+ _567_
+ _568_
+ _569_
+ _570_
+ _571_
+ _572_
+ _573_
+ _574_
+ _575_
+ _576_
+ _577_
+ _578_
+ _580_
+ _581_
+ _583_
+ _584_
+ _585_
+ _587_
+ _588_
+ _589_
+ _590_
+ _591_
+ _592_
+ _593_
+ _594_
+ _595_
+ _596_
+ _597_
+ _598_
+ _599_
+ _600_
+ _601_
+ _602_
+ _603_
+ _604_
+ _605_
+ _606_
+ _607_
+ _608_
+ _609_
+ _610_
+ _611_
+ _612_
+ _613_
+ _614_
+ _615_
+ _616_
+ _617_
+ _618_
+ _619_
+ _620_
+ _621_
+ _622_
+ _623_
+ _624_
+ _625_
+ _626_
+ _627_
+ _628_
+ _629_
+ _630_
+ _631_
+ _632_
+ _633_
+ _634_
+ _635_
+ _636_
+ _637_
+ _638_
+ _639_
+ _640_
+ _641_
+ _642_
+ _643_
+ _644_
+ _645_
+ _646_
+ _647_
+ _648_
+ _649_
+ _650_
+ _651_
+ _652_
+ _653_
+ _654_
+ _655_
+ _656_
+ _657_
+ _658_
+ _659_
+ _660_
+ _661_
+ _662_
+ _663_
+ _664_
+ _665_
+ _666_
+ _667_
+ _668_
+ _669_
+ _670_
+ _671_
+ _672_
+ _673_
+ _674_
+ _675_
+ _676_
+ _677_
+ _678_
+ _679_
+ _680_
+ _681_
+ _682_
+ _683_
+ _684_
+ _685_
+ _686_
+ _687_
+ _688_
+ _689_
+ _690_
+ _691_
+ _692_
+ _693_
+ _694_
+ _695_
+ _696_
+ _697_
+ _698_
+ _699_
+ _700_
+ _701_
+ _702_
+ _703_
+ _704_
+ _705_
+ _706_
+[ERROR DPL-0033] detailed placement checks failed.
+DPL-0033
+Placement Analysis
+---------------------------------
+total displacement        253.3 u
+average displacement        0.5 u
+max displacement            2.4 u
+original HPWL            5423.6 u
+legalized HPWL           5561.1 u
+delta HPWL                    3 %
+
+[INFO DPL-0020] Mirrored 163 instances
+[INFO DPL-0021] HPWL before            5561.1 u
+[INFO DPL-0022] HPWL after             5492.9 u
+[INFO DPL-0023] HPWL delta               -1.2 %
+=== check_placement after detailed placement ===
+CHECK_PLACEMENT_DP_PASSED

@@ -1,0 +1,114 @@
+{
+ "design": "gcd (OpenROAD test/gcd_nangate45.v), Nangate45, OpenROAD 2.0-12381-g01bba3695",
+ "instances": 461,
+ "rows": 57,
+ "site_dbu": 380,
+ "dbu_per_um": 2000,
+ "ours": {
+  "global_place": {
+   "verdict": "illegal",
+   "counts": {
+    "ROW": 347,
+    "SITE": 347,
+    "BOUNDS": 0,
+    "FIXED": 0,
+    "OVERLAP": 0
+   },
+   "rect_intersect_diagnostics": 259,
+   "orientation_mismatches": 0,
+   "hpwl_um_centre_pins": 5421.161,
+   "hpwl_um_true_pins": 5424.557
+  },
+  "detailed_place": {
+   "verdict": "legal",
+   "counts": {
+    "ROW": 0,
+    "SITE": 0,
+    "BOUNDS": 0,
+    "FIXED": 0,
+    "OVERLAP": 0
+   },
+   "rect_intersect_diagnostics": 0,
+   "orientation_mismatches": 0,
+   "hpwl_um_centre_pins": 5562.305,
+   "hpwl_um_true_pins": 5493.91
+  }
+ },
+ "displacement_gp_to_dp": {
+  "cells": 347,
+  "total_um": 253.343,
+  "average_um": 0.7301,
+  "max_um": 2.431
+ },
+ "three_faults": {
+  "injected": {
+   "half_site": "_345_",
+   "off_row": "_462_",
+   "overlap": [
+    "_669_",
+    "_706_"
+   ]
+  },
+  "verdict": "illegal",
+  "violations": [
+   [
+    "SITE",
+    [
+     "_345_"
+    ]
+   ],
+   [
+    "ROW",
+    [
+     "_462_"
+    ]
+   ],
+   [
+    "OVERLAP",
+    [
+     "_669_",
+     "_706_"
+    ]
+   ]
+  ],
+  "diagnostics": []
+ },
+ "openroad": {
+  "gcd_global_place.def": {
+   "status": "FAIL",
+   "failures": {
+    "Overlap_failures": 237,
+    "Site_alignment_failures": 347
+   }
+  },
+  "gcd_detailed_place.def": {
+   "status": "PASS",
+   "failures": {}
+  },
+  "gcd_three_faults.def": {
+   "status": "FAIL",
+   "failures": {
+    "Overlap_failures": [
+     "_669_",
+     "_706_"
+    ],
+    "Site_alignment_failures": [
+     "_345_",
+     "_462_"
+    ]
+   }
+  }
+ },
+ "openroad_global_place_set_agreement": {
+  "site_or_row_vs_site_alignment": true,
+  "overlap_or_rect_vs_overlap": false,
+  "ours_overlap_or_rect": 260,
+  "openroad_overlap": 237
+ },
+ "openroad_detailed_place_set_agreement": {
+  "site_or_row_vs_site_alignment": true,
+  "overlap_or_rect_vs_overlap": true,
+  "ours_overlap_or_rect": 0,
+  "openroad_overlap": 0
+ }
+}
