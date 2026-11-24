@@ -67,7 +67,7 @@ export async function createPythonLab(root, {lang = 'zh'} = {}) {
     <p data-py="status" class="python-status" role="status">${T.ready}</p><p data-py="stale" class="python-stale" hidden>${T.stale}</p>
     <p data-py="source" class="python-source"></p>
     <div class="python-output-grid"><div><h4>${T.output}</h4><pre data-py="output" class="python-output" tabindex="0" aria-label="${T.output}">${T.none}</pre></div>
-    <div><h4>${T.results}</h4><div data-py="results" class="python-results" tabindex="0" aria-label="${T.results}"></div></div></div>
+    <div><h4>${T.results}</h4><div data-py="results" class="python-results" role="region" tabindex="0" aria-label="${T.results}"></div></div></div>
     <details class="python-example"><summary>${T.sample}</summary><pre data-py="sample-code" tabindex="0" aria-label="${T.sample}"></pre><button type="button" data-py="sample">${T.sampleLoad}</button></details>
     <details class="python-reference"><summary>${T.reference}</summary><button type="button" data-py="reference">${T.refTest}</button><pre data-py="reference-code" tabindex="0" aria-label="${T.reference}"></pre></details>`;
   const $ = key => root.querySelector(`[data-py="${key}"]`);

@@ -11,7 +11,7 @@ const BASE = (process.env.SITE_URL || "http://127.0.0.1:8803/legalization-lesson
 const axeSrc = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
 const PAGES = ["", "verify/", "listen/", "study/"];
 const results = { base: BASE, at: new Date().toISOString(), pages: {}, checks: {} };
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.BROWSER_PROXY ? {proxy:{server:process.env.BROWSER_PROXY}} : {});
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 let failed = 0;
 const ok = (name, cond, detail = "") => {
@@ -94,14 +94,24 @@ for (const [scheme, p] of [...PAGES.map((p) => ["light", p]), ...PAGES.map((p) =
   // four films: each loads with metadata
   const cards = page.locator(".film-card");
   ok("films: four film cards", (await cards.count()) === 4);
-  for (let i = 0; i < 4; i++) {
+  // Film selection awaits its clock JSON before changing the media source.
+  // Wait for both the selected tab and new metadata, rather than reading the previous film.
+  const selectFilm = async (i) => {
+    const id = await cards.nth(i).getAttribute("data-film");
     await cards.nth(i).click();
+    await page.waitForFunction(id => {
+      const selected = document.querySelector('.film-card[aria-selected="true"]');
+      return selected?.dataset.film === id && document.getElementById("v").readyState >= 1;
+    }, id);
+  };
+  for (let i = 0; i < 4; i++) {
+    await selectFilm(i);
     const dur = await page.evaluate(() => new Promise((res) => { const v = document.getElementById("v"); if (v.readyState >= 1) res(v.duration); else v.addEventListener("loadedmetadata", () => res(v.duration), { once: true }); }));
     const label = await cards.nth(i).locator(".num").innerText();
     ok(`film ${label}: video metadata loads`, dur > 100, `duration ${dur}`);
   }
   // film -> lab: the 精讲 film near the end of its two-repairs chapter
-  await cards.nth(1).click();
+  await selectFilm(1);
   const t = await page.evaluate(async () => { const c = await (await fetch("media/films/concise.clock.zh.json")).json(); const cue = c.cues.find((x) => x.id === "c11"); return cue.end - 1; });
   await page.evaluate((t) => new Promise((res) => { const v = document.getElementById("v"); const go = () => { v.addEventListener("seeked", res, { once: true }); v.currentTime = t; }; if (v.readyState >= 1) go(); else v.addEventListener("loadedmetadata", go, { once: true }); }), t);
   await page.locator("#to-lab").click();

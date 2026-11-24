@@ -32,7 +32,7 @@ if (!url) {
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   url = `http://127.0.0.1:${server.address().port}${prefix}`;
 }
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.BROWSER_PROXY ? {proxy:{server:process.env.BROWSER_PROXY}} : {});
 const checks = [];
 const ok = (name, condition) => { assert.ok(condition, name); checks.push(name); console.log(`PASS ${name}`); };
 try {
@@ -53,7 +53,7 @@ try {
   const run = async code => { await editor.fill(code); await root.locator('[data-py="run"]').click(); await waitDone(); };
   ok('runtime is lazy-loaded', !requests.some(u => u.endsWith('.wasm')));
   await run('print(sum(i*i for i in range(5)))');
-  ok('actual Python executes user code', (await output.innerText()).trim() === '30');
+  ok('actual Python executes user code', (await output.innerText()).trim() === '30' || assert.fail(`Python output: ${await output.innerText()}`));
   ok('runtime comes from this site', requests.filter(u => /vendor\//.test(u)).every(u => new URL(u).origin === new URL(url).origin));
   await run('def broken(:\n    pass');
   ok('syntax error includes Python traceback', /SyntaxError/.test(await output.innerText()));
