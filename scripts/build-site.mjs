@@ -4,6 +4,7 @@ import { cpSync, mkdirSync, readdirSync, readFileSync, writeFileSync, statSync, 
 import { join, relative, dirname } from "node:path";
 import { execFileSync } from "node:child_process";
 import { figures, figureHtml } from "./figures.mjs";
+execFileSync("python3", ["scripts/build-python-lab.py"]);
 const FIGS = figures();
 
 const OUT = "dist";

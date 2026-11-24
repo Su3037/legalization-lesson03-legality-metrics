@@ -9,10 +9,12 @@
     "test:py": "python3 -m pytest -q tests/py",
     "fuzz": "node tests/diff/fuzz.mjs",
     "build": "node scripts/build-site.mjs",
-    "serve": "python3 scripts/serve.py"
+    "serve": "python3 scripts/serve.py",
+    "test:browser-python": "node tests/browser-python.mjs"
   },
   "devDependencies": {
+    "axe-core": "4.14.1",
     "fast-check": "4.11.0",
-    "axe-core": "4.14.1"
+    "playwright": "1.63.0"
   }
 }

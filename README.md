@@ -89,3 +89,7 @@ node scripts/build-site.mjs && python3 scripts/serve.py   # http://127.0.0.1:880
 
 Code MIT ([`LICENSE`](LICENSE)); content CC BY 4.0. Adapted from Yongfu Li's *eda-learning* (CC BY 4.0);
 details and third-party notices in [`NOTICE.md`](NOTICE.md).
+
+## Online Python practice
+
+Section 08 now includes a real browser Python editor: run code, test the original exercise cases, inspect errors, save drafts, and import/export `.py` files. No Python installation is required. Runtime assets are served from this site, with no execution backend or CDN dependency. See [online Python documentation](docs/online-python.md).

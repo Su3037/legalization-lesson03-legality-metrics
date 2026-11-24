@@ -7,6 +7,7 @@
 <meta name="description" content="Legality metrics lesson: five legality rules, a checker, displacement and HPWL; four films, a live lab, challenges and a Python track.">
 <link rel="stylesheet" href="{{BASE}}assets/fonts.css">
 <link rel="stylesheet" href="{{BASE}}assets/site.css">
+<link rel="stylesheet" href="{{BASE}}python-lab/python-lab.css">
 </head>
 <body>
 <div id="app">
@@ -189,26 +190,14 @@
 </div></section>
 
 <section id="python" class="section"><div class="wrap">
-<div class="section-head"><div><p class="eyebrow">08 / Python</p><h2>自己写一个检查器</h2></div><p>只需要 Python 3.8+，不用装任何包。</p></div>
-<div class="grid-2"><div>
-<ol class="objectives">
-<li>下载压缩包，打开 <code>starter.py</code>，补完 7 个标了 TODO 的函数。</li>
-<li><code>validate</code>：空布局、缺单元、多了未声明的单元、坐标不是有限的数 → 输入无效。</li>
-<li><code>on_row</code>、<code>on_site</code>、<code>inside</code>：规则一到三，坐标换成整数 DBU 再比较。</li>
-<li><code>intervals_overlap</code>：左闭右开，相接不算重叠。<code>displacement</code>：相对不变的参考布局。<code>hpwl</code>：单元中心的包围盒。</li>
-<li>运行 <code>python check.py</code>：24 个用例，结果是 PASS、INCOMPLETE 或 FAIL。</li>
-</ol>
-<p class="btn-row"><a class="btn primary" href="{{BASE}}downloads/module03-python-exercise.zip" download>下载 Python 练习</a></p>
-</div><div>
-<h3>自测输出</h3>
-<pre class="code">$ python check.py
-  ok    seed: three cells stacked
-  ok    legal golden placement
-  FAIL  touching cells are legal: verdict 'illegal',
-        expected 'legal'; ...
-FAIL: 21 passed, 3 failed, 0 not implemented</pre>
-<p class="small muted">上面的 FAIL 来自一个把区间写成闭区间的实现：相接的 A、B 被误判为重叠。用例里还有三个站点宽 0.19 的布局，直接用浮点数比较也会 FAIL。PASS = 24 个全对；INCOMPLETE = 没有算错，但还有函数没写。完整的参考实现在仓库的 <a href="https://github.com/su3037/legalization-lesson03-legality-metrics/tree/main/python/legality_metrics">python/legality_metrics</a>。</p>
-</div></div>
+<div class="section-head"><div><p class="eyebrow">08 / Python</p><h2>在线写一个检查器</h2></div><p>点开网页就能写代码、运行 Python、测试原有的 24 个练习用例，无需安装或下载。</p></div>
+<div data-python-lab></div>
+<details class="offline-practice"><summary>离线练习与下载（可选）</summary>
+<p>在线编辑器与下载包使用相同的起始代码、参考实现、判题程序和用例。TODO 还没完成时会显示“未完成”，不会算作通过。</p>
+<p><code>validate</code> 检查输入；<code>on_row</code>、<code>on_site</code>、<code>inside</code> 检查坐标；<code>intervals_overlap</code> 判断半开区间；<code>displacement</code> 和 <code>hpwl</code> 计算指标。</p>
+<p>离线使用 Python 3.8+，执行 <code>python check.py</code>；参考实现检查：<code>python check.py --impl reference</code>。</p>
+<p class="btn-row"><a class="btn" href="{{BASE}}downloads/module03-python-exercise.zip" download>下载 Python 练习包</a></p>
+</details>
 </div></section>
 
 <section id="mistakes" class="section"><div class="wrap">
@@ -258,6 +247,10 @@ FAIL: 21 passed, 3 failed, 0 not implemented</pre>
 <script type="module">
 import { startPage } from "{{BASE}}src/site/page.js";
 startPage({ base: "{{BASE}}" }).catch((e) => { console.error(e); window.appError = String(e); });
+</script>
+<script type="module">
+import { createPythonLab } from "{{BASE}}python-lab/python-lab.js";
+createPythonLab(document.querySelector('[data-python-lab]'), {lang: 'zh'});
 </script>
 </body>
 </html>

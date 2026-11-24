@@ -38,6 +38,7 @@ jobs:
           npx playwright install --with-deps chromium
           (python scripts/serve.py 8803 &) ; sleep 2
           node tests/e2e/site.mjs build/e2e-ci.json
+          node tests/browser-python.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
